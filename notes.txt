@@ -1,0 +1,45 @@
+TRANSDUCER\d  - array of TRANSDUCERS
+- Instrument Pressure \d # As Found
+- Master Value \d   # Gauge Reading Set Point
+- Note: IP1 = MV1 
+    
+Once selected, prompt for "As Found", "As Left", or "Both"
+- If as left, proppt for as found file. etc etc.
+- If both, continue on with logic.
+
+If Transducer Name contains "CUSTOM" - prompt for the name in an input box  (change to Type)
+Part Number: "CTS A12-221" Value "250CCM"
+
+Data to always enter in
+- Instrument
+- Customer Name
+- Customer Address
+- Control Number
+- Serial Number
+- Accuracy (once, but applies to the full List)
+- Barometric Pressure
+- Temperature
+- Humidity
+
+
+Auto Data
+- Date [Verify Date]
+- Part Number  "middle number from Part Name/Type variable"
+
+
+Calculations: etc
+- High Limit/ Low Limit eg: (SPAN*1.0005 + column) (SPAN*0.9995 - column)
+- Delta =  abs(gauge reading) - abs(asleft|asfound) 
+- PSIA - PRESSURE
+- SCCM - FLOW
+- TRANSDUCER1 Will ALWAYS be pressure
+
+CONFIG: 
+- Mensor Numbers etc
+	- Cal device, cal serial, Cal cal date, cal due date
+	
+	
+# HARDWARE CALIBRATION
+ -  "Mass Flow Trans"  look at `Instrument Flow` and `Master Reading`
+ -  "Pressure Transducer"  `Instrument Pressure` and `Master Value`
+-  Always take the SECOND `Master Value`
