@@ -49,7 +49,7 @@ def parse_calibration_data(text):
     return calibration_data
 
 
-def parse_hardware_calibration(content):
+def parse_hardware_calibration(content, accuracy):
     # Split the content into instrument info and calibration data sections
     info_section, calibration_section = content.split(
         "|| Hardware Calibration Report ||"
