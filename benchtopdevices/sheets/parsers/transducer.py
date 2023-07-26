@@ -3,8 +3,16 @@ from decimal import *
 import re
 
 
-def parse_transducer(content):
-    getcontext().prec = 3
+def in_range(index, value, master_values):
+    return (
+        master_values[index]["Low Limit"] <= value <= master_values[index]["High Limit"]
+    )
+
+
+def parse_transducer(content, accuracy):
+    getcontext().prec = 6
+
+    accuracy = Decimal(f"{accuracy/100.0}")  # Comes in as Percent 
     transducer_data = []
 
     # Split the content into sections based on the blank line
@@ -37,11 +45,12 @@ def parse_transducer(content):
 
         # Create a dictionary to store the data for each transducer
         transducer_info = {
+            "Accuracy": accuracy,
             "Part Number": part_number,
             "Value": value,
             "Transducer Name": transducer_name,
             "Transducer Type": transducer_type,
-            "Setpoint Pressure": [],
+            # "Setpoint Pressure": [],
             "Instrument Pressure": [],
             "Master Value": [],
             "Instrument Flow": [],
@@ -63,15 +72,44 @@ def parse_transducer(content):
             v = Decimal(value.split(" ")[0])
             key = re.match(r"(.*)\W(\d)", key)[1]
             if key in transducer_info:
-                transducer_info[key].append(Decimal(value.split()[0]))
+                value = Decimal(value.split()[0])
+                # special case Master to get the limits
+                if "Master" in key:
+                    hi = Decimal(Decimal(1.0) + accuracy)
+                    lo = Decimal(Decimal(1.0) - accuracy)
+                    transducer_info[key].append(
+                        {
+                            "Low Limit": lo,
+                            "Value": value,
+                            "High Limit": value * hi,
+                        }
+                    )
+                else:
+                    transducer_info[key].append(value)
 
+
+        transducer_info[f"Instrument {transducer_type}"] = [
+            {
+                "Value": v,
+                "In Range": in_range(idx, v, transducer_info["Master Value"]),
+            }
+            for idx, v in enumerate(transducer_info[f"Instrument {transducer_type}"])
+        ]
+        
+        if transducer_type == "Flow":
+            del transducer_info["Instrument Pressure"]
+        elif transducer_type == "Pressure":
+            del transducer_info["Instrument Flow"]
         transducer_data.append(transducer_info)
 
     return transducer_data
 
 
 if __name__ == "__main__":
+    from pprint import pprint
+
     file_path = "./transducer_verify.txt"
     with open(file_path, "r") as file:
         content = file.read()
-    parsed_data = parse_transducer(file_path)
+    parsed_data = parse_transducer(content, 0.5)
+    pprint(parsed_data)

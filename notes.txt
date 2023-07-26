@@ -29,7 +29,7 @@ Auto Data
 
 Calculations: etc
 - High Limit/ Low Limit eg: (SPAN*1.0005 + column) (SPAN*0.9995 - column)
-- Delta =  abs(gauge reading) - abs(asleft|asfound) 
+- Delta =  abs(gauge reading) - abs(asleft|asfound)
 - PSIA - PRESSURE
 - SCCM - FLOW
 - TRANSDUCER1 Will ALWAYS be pressure
