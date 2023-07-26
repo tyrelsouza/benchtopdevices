@@ -1,7 +1,94 @@
-<form action="." method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
-    <input type="submit" value="Submit">
-</form>
+<html>
+<body class="app">
+
+<script type="importmap">
+{ 
+    "imports": {
+        "vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.41/vue.esm-browser.js"
+    } 
+}
+</script>
+
+<div id="app">
+    <form action="." method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            {{ form.as_p }}
+        </table>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+{% verbatim %}
+<script type="module">
+  import { createApp, ref, reactive, computed } from 'vue'
+
+  // Vue.config.delimiters = ['${', '}'];
+  const vm = createApp({
+    el: "#app",
+    data() {
+        const instrument = ""
+        const customer_name = ""
+        const customer_address = ""
+        const control_number = ""
+        const serial_number = ""
+        const accuracy = ref("0.5")
+        const barometric_pressure = ref(1013.25)
+        const temperature = ref("50")
+        const humidity = ref("50.0")
+        const report_type = ""
+        const as_found = ""
+        const as_left = ""
+        const both = ""
+        const show_as_found = reactive(true)
+        const show_as_left = reactive(true)
+        const show_both = reactive(true)
+
+        return {
+            instrument,
+            customer_name,
+            customer_address,
+            control_number,
+            serial_number,
+            accuracy,
+            barometric_pressure,
+            temperature,
+            humidity,
+            report_type,
+            as_found,
+            as_left,
+            both,
+            show_as_found,
+            show_as_left,
+            show_both
+        }
+    },
+    ready: () => {
+        this.watchFileInput();
+    },
+    methods: {
+        change_as_found: function(event) {
+            console.log(this)
+            this.show_both = false
+        },
+        change_as_left: function(event) {
+            this.show_both = false
+        },
+        change_both: function(event) {
+            this.show_as_found = false
+            this.show_as_left = false
+        },
+        watchFileInput: function() {
+            // will notify a file input
+            $('input[type="file"]').change(this.notifyFileInput.bind(this));
+        },
+        
+        notifyFileInput: function(event) {
+            var fileName = event.target.files[0].name;
+            // update file name value
+            this.file = fileName;
+        }
+    }
+  }).mount("#app")
+</script>
+{% endverbatim %}
