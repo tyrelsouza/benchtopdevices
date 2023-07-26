@@ -92,10 +92,11 @@ def parse_transducer(content, accuracy):
             {
                 "Value": v,
                 "In Range": in_range(idx, v, transducer_info["Master Value"]),
+                "Delta":"TODO"
             }
             for idx, v in enumerate(transducer_info[f"Instrument {transducer_type}"])
         ]
-        
+
         if transducer_type == "Flow":
             del transducer_info["Instrument Pressure"]
         elif transducer_type == "Pressure":

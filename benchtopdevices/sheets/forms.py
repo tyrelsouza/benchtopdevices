@@ -14,6 +14,7 @@ class UploadFileForm(forms.Form):
     temperature = forms.FloatField(widget=forms.NumberInput(attrs={'step': 0.01, 'max': 1000.0, 'min': -459.67}))
     humidity = forms.FloatField(widget=forms.NumberInput(attrs={'step': 0.01, 'max': 100.0, 'min': 0.0}))
 
+
     CHOICES = [
         ('TV', _('Transducer Verify')),
         ('HC', _('Hardware Calibration'))
@@ -23,4 +24,5 @@ class UploadFileForm(forms.Form):
         widget=forms.RadioSelect,
         choices=CHOICES, 
     )
+
     file = forms.FileField()

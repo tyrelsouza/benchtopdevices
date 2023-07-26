@@ -3,8 +3,8 @@ from django.db import models
 # Create your models here.
 
 class Configuration(models.Model):
-    sertial = models.CharField(max_length = 200)
-    description = models.TextField()
+    serial = models.CharField(max_length=100)
+    device = models.CharField(max_length=100)
     calibration_date = models.DateField()
     calibration_due_date = models.DateField()
 
