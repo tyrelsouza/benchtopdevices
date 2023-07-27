@@ -27,4 +27,4 @@ Returns a PDF and prints a label
 - [ ] Parse and Prompt AS FOUND
 - [ ] Generate PDF
 - [ ] Generate Label
-
+- [ ] Docker stuff
