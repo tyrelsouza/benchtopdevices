@@ -22,6 +22,9 @@ Returns a PDF and prints a label
 ## TODO
 
 - [x] Django app to take in data
-- [x] Parse data
+- [x] Parse "BOTH"
+- [ ] Parse and Prompt AS LEFT
+- [ ] Parse and Prompt AS FOUND
 - [ ] Generate PDF
 - [ ] Generate Label
+
