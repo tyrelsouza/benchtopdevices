@@ -13,9 +13,35 @@
     <form action="." method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <table>
-            {{ form.as_p }}
+            <tdata>
+                <tr><td>Customer Name</td><td>{{ form.customer_name }}</td></tr>
+                <tr><td>Customer Address</td><td>{{ form.customer_address }}</td></tr>
+                <tr><td colspan=2><hr></td></tr>
+
+                <tr><td>Instrument</td><td>{{ form.instrument }}</td></tr>
+                <tr><td>Control Number</td><td>{{ form.control_number }}</td></tr>
+                <tr><td>Serial Number</td><td>{{ form.serial_number }}</td></tr>
+                <tr><td colspan=2><hr></td></tr>
+
+                <tr><td>Accuracy</td><td>{{ form.accuracy }}</td></tr>
+                <tr><td>Barometric Pressure (mbar)</td><td>{{ form.barometric_pressure }}</td></tr>
+                <tr><td>Temperature (&deg;F)</td><td>{{ form.temperature }}</td></tr>
+                <tr><td>Humidity</td><td>{{ form.humidity }}</td></tr>
+                <tr><td colspan=2><hr></td></tr>
+
+                <tr><td>Report Type</td><td>{{ form.report_type }}</td></tr>
+                <tr><td>Configuration(s)</td><td>{{ form.configuration }}</td></tr>
+                <tr><td colspan=2><hr></td></tr>
+
+
+                <tr><td>As Found: {{ form.as_found }}</td><td>As Left:{{ form.as_left }}</td></tr>
+                <tr><td colspan=2>One File: {{ form.both }}</td></tr>
+                <tr><td colspan=2><hr></td></tr>
+                <tr><td>&nbsp;</td><td align="right"><input type="submit" value="Generate PDF and Label"></td></tr>
+
+            </tdata>
         </table>
-        <input type="submit" value="Submit">
+        
     </form>
 </div>
 
@@ -92,3 +118,5 @@
   }).mount("#app")
 </script>
 {% endverbatim %}
+</body>
+</html>

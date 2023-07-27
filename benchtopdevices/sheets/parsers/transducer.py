@@ -1,7 +1,5 @@
-from decimal import *
-
 import re
-
+import json
 
 def in_range(index, value, master_values):
     return (
@@ -9,10 +7,12 @@ def in_range(index, value, master_values):
     )
 
 
-def parse_transducer(content, accuracy):
-    getcontext().prec = 6
+def delta(index, value, master_values):
+    return abs(master_values[index]["Low Limit"] - value)
 
-    accuracy = Decimal(f"{accuracy/100.0}")  # Comes in as Percent 
+
+def parse_transducer(content, accuracy):
+    accuracy = accuracy/100.0  # Comes in as Percent 
     transducer_data = []
 
     # Split the content into sections based on the blank line
@@ -50,7 +50,6 @@ def parse_transducer(content, accuracy):
             "Value": value,
             "Transducer Name": transducer_name,
             "Transducer Type": transducer_type,
-            # "Setpoint Pressure": [],
             "Instrument Pressure": [],
             "Master Value": [],
             "Instrument Flow": [],
@@ -69,30 +68,30 @@ def parse_transducer(content, accuracy):
                 continue
 
             # Toss anything else where it belongs
-            v = Decimal(value.split(" ")[0])
+            v = value.split(" ")[0]
             key = re.match(r"(.*)\W(\d)", key)[1]
             if key in transducer_info:
-                value = Decimal(value.split()[0])
+                value = int(float(value.split()[0])*1000)
                 # special case Master to get the limits
                 if "Master" in key:
-                    hi = Decimal(Decimal(1.0) + accuracy)
-                    lo = Decimal(Decimal(1.0) - accuracy)
+                    hi = 1.0 + accuracy
+                    lo = 1.0 - accuracy
                     transducer_info[key].append(
                         {
-                            "Low Limit": lo,
-                            "Value": value,
-                            "High Limit": value * hi,
+                            "Low Limit": int(value*lo),
+                            "Master Value": value,
+                            "High Limit": int(value * hi),
                         }
                     )
                 else:
                     transducer_info[key].append(value)
 
-
+        # Once we have the readings, and master values, we can do the math
         transducer_info[f"Instrument {transducer_type}"] = [
             {
                 "Value": v,
                 "In Range": in_range(idx, v, transducer_info["Master Value"]),
-                "Delta":"TODO"
+                "Delta": delta(idx, v, transducer_info["Master Value"])
             }
             for idx, v in enumerate(transducer_info[f"Instrument {transducer_type}"])
         ]
@@ -108,9 +107,18 @@ def parse_transducer(content, accuracy):
 
 if __name__ == "__main__":
     from pprint import pprint
-
     file_path = "./transducer_verify.txt"
     with open(file_path, "r") as file:
-        content = file.read()
-    parsed_data = parse_transducer(content, 0.5)
-    pprint(parsed_data)
+        output = {
+            "Instrument": "CTS0JODFDASH",
+            "Customer Name": "Anthony Souza",
+            "Customer Address": "PO Box 357, West Chesterfield, NH 03466",
+            "Control Number": "123123",
+            "Serial Number": "123313",
+            "Accuracy": 0.5,
+            "Barometric Pressure": 1013.25,
+            "Temperature": 50.3,
+            "Humidity": 27,
+            "Transducers": parse_transducer(file.read(), 0.5)
+        }
+        print(json.dumps(output))
