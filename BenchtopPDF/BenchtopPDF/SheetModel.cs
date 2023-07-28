@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace BenchtopPDF
 {
     /// Sheet myDeserializedClass = JsonConvert.DeserializeObject<Sheet>(myJsonResponse);
-    public class InstrumentFlow
+    public class GaugeReading
     {
         public int Value { get; set; }
 
@@ -15,19 +15,13 @@ namespace BenchtopPDF
         public int Delta { get; set; }
     }
 
-    public class InstrumentPressure
-    {
-        public int Value { get; set; }
-
-        [JsonProperty("In Range")]
-        public bool InRange { get; set; }
-        public int Delta { get; set; }
-    }
 
     public class MasterValue
     {
         [JsonProperty("Low Limit")]
         public int LowLimit { get; set; }
+        
+        [JsonProperty("Master Value")]
         public int Value { get; set; }
 
         [JsonProperty("High Limit")]
@@ -64,7 +58,13 @@ namespace BenchtopPDF
 
         [JsonProperty("Part Number")]
         public string PartNumber { get; set; }
-        public string Value { get; set; }
+        
+        public int Value { get; set; }
+        
+        public string Unit { get; set; }
+        
+        [JsonProperty("Limit ABS")]
+        public int LimitABS { get; set; }
 
         [JsonProperty("Transducer Name")]
         public string TransducerName { get; set; }
@@ -72,8 +72,8 @@ namespace BenchtopPDF
         [JsonProperty("Transducer Type")]
         public string TransducerType { get; set; }
 
-        [JsonProperty("Instrument Pressure")]
-        public List<InstrumentPressure> InstrumentPressure { get; set; }
+        [JsonProperty("Gauge Reading")]
+        public List<GaugeReading> GaugeReading { get; set; }
 
         [JsonProperty("Master Value")]
         public List<MasterValue> MasterValue { get; set; }
@@ -84,8 +84,6 @@ namespace BenchtopPDF
         [JsonProperty("Verify Time")]
         public string VerifyTime { get; set; }
 
-        [JsonProperty("Instrument Flow")]
-        public List<InstrumentFlow> InstrumentFlow { get; set; }
     }
 
 

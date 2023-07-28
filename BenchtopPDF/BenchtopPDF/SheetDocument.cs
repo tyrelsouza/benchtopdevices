@@ -36,9 +36,7 @@ namespace BenchtopPDF
                     
                     page.Footer().AlignCenter().Text(text =>
                     {
-                        text.CurrentPageNumber();
-                        text.Span(" / ");
-                        text.TotalPages();
+                        text.Span(" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin eget ligula vehicula, efficitur massa vitae, ullamcorper ligula. Nulla at varius nunc. Quisque nec scelerisque velit. Vestibulum accumsan, lacus vitae auctor commodo, elit elit posuere mauris, vel mollis risus risus ut nibh. Phasellus risus velit, tincidunt eu molestie et, maximus ut velit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Etiam eu arcu vel metus iaculis maximus at in purus. Proin diam eros, sodales vel faucibus ut, varius id metus. Donec sed ipsum a mauris varius fringilla. Nulla a nulla quis tellus finibus vehicula.");
                     });
                 });
         }
@@ -138,7 +136,9 @@ namespace BenchtopPDF
         public void Compose(IContainer container)
         {
             var headerStyle = TextStyle.Default.SemiBold();
-            container.Table(table =>
+            container
+                .DefaultTextStyle(x => x.FontSize(10))
+                .Table(table =>
             {
                 table.ColumnsDefinition(columns =>
                 {
@@ -152,54 +152,30 @@ namespace BenchtopPDF
                 
                 table.Header(header =>
                 {
-                    header.Cell().Text("Point #").Style(headerStyle);
+                    header.Cell().ColumnSpan(6).PaddingBottom(0).BorderBottom(1)
+                        .BorderColor(Colors.Black).AlignCenter().Text($"Data (IN {t.Unit})");
+
+                    header.Cell().AlignCenter().Text("Point #").Style(headerStyle);
                     header.Cell().AlignRight().Text("Master Value").Style(headerStyle);
                     header.Cell().AlignRight().Text("Low Limit").Style(headerStyle);
-                    header.Cell().AlignRight().Text("High Limit").Style(headerStyle);
                     header.Cell().AlignRight().Text("DUT").Style(headerStyle);
+                    header.Cell().AlignRight().Text("High Limit").Style(headerStyle);
                     header.Cell().AlignRight().Text("Delta").Style(headerStyle);
                     
-                    header.Cell().ColumnSpan(6).PaddingTop(5).BorderBottom(1).BorderColor(Colors.Black);
                 });
-
-                switch (t.TransducerType)
+                
+                foreach (var i in t.GaugeReading)
                 {
-                    case "Flow":
+                    var index = t.GaugeReading.IndexOf(i) + 1;
+                    var masterValue = t.MasterValue[t.GaugeReading.IndexOf(i)];
+
+                    if (i.InRange)
                     {
-                        foreach (var flow in t.InstrumentFlow)
-                        {
-                            var index = t.InstrumentFlow.IndexOf(flow) + 1;
-                            var masterValue = t.MasterValue[t.InstrumentFlow.IndexOf(flow)];
-
-                            if (flow.InRange)
-                            {
-                                StandardRow(table, index, masterValue, flow.Value, flow.Delta);
-                            }
-                            else
-                            {
-                                OutOfRangeRow(table, index, masterValue, flow.Value, flow.Delta);
-                            } 
-                        }
-
-                        break;
+                        StandardRow(table, index, masterValue, i.Value, i.Delta);
                     }
-                    case "Pressure":
+                    else
                     {
-                        foreach (var pressure in t.InstrumentPressure)
-                        {
-                            var index = t.InstrumentPressure.IndexOf(pressure) + 1;
-                            var masterValue = t.MasterValue[t.InstrumentPressure.IndexOf(pressure)];
-
-                            if (pressure.InRange)
-                            {
-                                StandardRow(table, index, masterValue, pressure.Value, pressure.Delta);
-                            }
-                            else
-                            {
-                                OutOfRangeRow(table, index, masterValue, pressure.Value, pressure.Delta);
-                            }                         }
-
-                        break;
+                        OutOfRangeRow(table, index, masterValue, i.Value, i.Delta);
                     }
                 }
             });
@@ -208,32 +184,34 @@ namespace BenchtopPDF
         private void StandardRow(TableDescriptor table, int index, MasterValue masterValue, int value, int delta)
         {
             static IContainer CellStyle(IContainer container) => container
+                .DefaultTextStyle(x => x.FontSize(8))
                 .BorderBottom(1)
-                .BorderColor(Colors.Transparent)
-                .PaddingVertical(5);
+                .BorderColor(Colors.Grey.Medium)
+                .PaddingVertical(2);
 
-            table.Cell().Element(CellStyle).Text($"{index}").FontSize(10);
-            table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.Value / 1000.0}").FontSize(10);
-            table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.LowLimit / 1000.0}").FontSize(10);
-            table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.HighLimit / 1000.0}").FontSize(10);
-            table.Cell().Element(CellStyle).AlignRight().Text($"{value / 1000.0}").FontSize(10);
-            table.Cell().Element(CellStyle).AlignRight().Text($"{delta / 1000.0}").FontSize(10);
+            table.Cell().Element(CellStyle).AlignCenter().Text($"{index}");
+            table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.Value / 1000.0:F3}");
+            table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.LowLimit / 1000.0:F3}");
+            table.Cell().Element(CellStyle).AlignRight().Text($"{value / 1000.0:F3}");
+            table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.HighLimit / 1000.0:F3}");
+            table.Cell().Element(CellStyle).AlignRight().Text($"{delta / 1000.0:F3}");
         }
         
         private void OutOfRangeRow(TableDescriptor table, int index, MasterValue masterValue, int value, int delta)
         {
             static IContainer CellStyle(IContainer container) => container
+                .DefaultTextStyle(x => x.FontSize(8))
                 .BorderBottom(1)
                 .BorderColor(Colors.Grey.Lighten3)
                 .Background(Colors.Grey.Lighten3)
                 .PaddingVertical(5);
 
-            table.Cell().Element(CellStyle).Text($"{index}").FontSize(10);
-            table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.Value / 1000.0}").FontSize(10);
-            table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.LowLimit / 1000.0}").FontSize(10);
-            table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.HighLimit / 1000.0}").FontSize(10);
-            table.Cell().Element(CellStyle).AlignRight().Text($"{value / 1000.0}").FontSize(10);
-            table.Cell().Element(CellStyle).AlignRight().Text($"{delta / 1000.0}").FontSize(10);
+            table.Cell().Element(CellStyle).AlignCenter().Text($"{index}").FontSize(10);
+            table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.Value / 1000.0:F3}").FontSize(10);
+            table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.LowLimit / 1000.0:F3}").FontSize(10);
+            table.Cell().Element(CellStyle).AlignRight().Text($"{value / 1000.0:F3}").FontSize(10).FontColor(Colors.Red.Medium);
+            table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.HighLimit / 1000.0:F3}").FontSize(10);
+            table.Cell().Element(CellStyle).AlignRight().Text($"{delta / 1000.0:F3}").FontSize(10);
         }
 
     }
