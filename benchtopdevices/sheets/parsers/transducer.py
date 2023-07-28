@@ -1,5 +1,6 @@
 import re
 import json
+from pprint import pprint
 
 def in_range(index, value, master_values):
     return (
@@ -34,13 +35,17 @@ def parse_transducer(content, accuracy):
 
         # Get part number and values
         value = None
+        unit = None
         transducer_type = None
         if part_number != "Custom":
             value = part_number.split()[-1]
             part_number = part_number.split()[1]
-            if value.endswith("SCCM"):
+            if match := re.match(r"([0-9]+)([A-Z]+)", value, re.I):
+                value, unit = match.groups()
+                value = int(value)
+            if unit == "SCCM":
                 transducer_type = "Flow"
-            if value.endswith("PSIA"):
+            if unit == "PSIA":
                 transducer_type = "Pressure"
 
         # Create a dictionary to store the data for each transducer
@@ -48,11 +53,12 @@ def parse_transducer(content, accuracy):
             "Accuracy": accuracy,
             "Part Number": part_number,
             "Value": value,
+            "Unit": unit,
+            "Limit ABS": int(value * accuracy * 1000),
             "Transducer Name": transducer_name,
             "Transducer Type": transducer_type,
-            "Instrument Pressure": [],
+            "Gauge Reading": [],
             "Master Value": [],
-            "Instrument Flow": [],
             "Verify Date": "",
             "Verify Time": "",
         }
@@ -68,38 +74,36 @@ def parse_transducer(content, accuracy):
                 continue
 
             # Toss anything else where it belongs
-            v = value.split(" ")[0]
             key = re.match(r"(.*)\W(\d)", key)[1]
-            if key in transducer_info:
+            if key in transducer_info or f"Instrument {transducer_type}" in key:
                 value = int(float(value.split()[0])*1000)
                 # special case Master to get the limits
                 if "Master" in key:
-                    hi = 1.0 + accuracy
-                    lo = 1.0 - accuracy
+                    hi = value + transducer_info["Limit ABS"]
+                    lo = value - transducer_info["Limit ABS"]
                     transducer_info[key].append(
                         {
-                            "Low Limit": int(value*lo),
+                            "Low Limit": int(lo),
                             "Master Value": value,
-                            "High Limit": int(value * hi),
+                            "High Limit": int(hi),
                         }
                     )
+                # Turn both Instrument Pressure and Instrument Flow to Gauge Reading
+                elif f"Instrument {transducer_type}" in key:
+                    transducer_info["Gauge Reading"].append(value)
                 else:
                     transducer_info[key].append(value)
 
         # Once we have the readings, and master values, we can do the math
-        transducer_info[f"Instrument {transducer_type}"] = [
+        transducer_info["Gauge Reading"] = [
             {
                 "Value": v,
                 "In Range": in_range(idx, v, transducer_info["Master Value"]),
                 "Delta": delta(idx, v, transducer_info["Master Value"])
             }
-            for idx, v in enumerate(transducer_info[f"Instrument {transducer_type}"])
+            for idx, v in enumerate(transducer_info["Gauge Reading"])
         ]
 
-        if transducer_type == "Flow":
-            del transducer_info["Instrument Pressure"]
-        elif transducer_type == "Pressure":
-            del transducer_info["Instrument Flow"]
         transducer_data.append(transducer_info)
 
     return transducer_data
@@ -121,4 +125,6 @@ if __name__ == "__main__":
             "Humidity": 27,
             "Transducers": parse_transducer(file.read(), 0.5)
         }
-        print(json.dumps(output))
+        print(json.dumps(output).replace('"', '""'))
+        pprint(output)
+
