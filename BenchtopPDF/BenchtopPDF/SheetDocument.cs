@@ -45,20 +45,46 @@ namespace BenchtopPDF
         {
             container.Row(row =>
             {
-                row.RelativeItem().Column(column =>
+                
+                row.ConstantItem(100).Image(LogoImage);
+                row.RelativeItem().PaddingHorizontal(10).Column(column =>
                 {
-                    column
-                        .Item().Text("Certificate Of Calibration")
-                        .FontSize(20).SemiBold().FontColor(Colors.Blue.Medium);
+                    column.Item().Text(text =>
+                    {
+                        text.Span("518 Route 9, PO Box 357, West Chesterfield, NH 03466").FontSize(6);
+                        // text.Span($"{Sheet.IssueDate:d}");
+                    });
+                    column.Item().Text(text =>
+                    {
+                        text.Span("Phone: 603.256.6100   Cell: 603.801.4551").FontSize(6);
+                    });
 
                     column.Item().Text(text =>
                     {
+                        text.Span("CERTIFICATE OF CALIBRATION")
+                            .FontSize(12)
+                            .SemiBold()
+                            .FontColor(Colors.Blue.Medium);
+                        text.AlignCenter();
+
+                        
+                    });
+                    column.Item().Text(text =>
+                    {
+                        // Instrument
+                        // CustomerName
+                        // CustomerAddress
+                        // ControlNumber
+                        // SerialNumber
+                        // Accuracy
+                        // BarometricPressure
+                        // Temperature
+                        // Humidity
                         text.Span("Issue date: ").SemiBold();
                         // text.Span($"{Sheet.IssueDate:d}");
                     });
                 });
 
-                row.ConstantItem(175).Image(LogoImage);
             });
         }
 
@@ -79,7 +105,7 @@ namespace BenchtopPDF
                     column.Item().Component(new TableComponent(transducer));
                 }
 
-            // var totalPrice = Sheet.Items.Sum(x => x.Price * x.Quantity);
+                // var totalPrice = Sheet.Items.Sum(x => x.Price * x.Quantity);
                 // column.Item().PaddingRight(5).AlignRight().Text($"Grand total: {totalPrice:C}").SemiBold();
 
                 // if (!string.IsNullOrWhiteSpace(Sheet.Comments))
