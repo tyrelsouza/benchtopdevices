@@ -9,7 +9,8 @@ namespace BenchtopPDF
 {
     public class SheetDocument : IDocument
     {
-        public static Image LogoImage { get; } = Image.FromFile("BenchTopLogo.jpg");
+        private static Image LogoImage { get; } = Image.FromFile("BenchTopLogo.png");
+        private static Image CertImage { get; } = Image.FromFile("a2lp_cert.png");
         
         public Sheet Sheet { get; }
 
@@ -26,90 +27,82 @@ namespace BenchtopPDF
 
         public void Compose(IDocumentContainer container)
         {
-            container
-                .Page(page =>
+            container.Page(page =>
                 {
-                    page.Margin(50);
+                    page.Margin(25);
                     
-                    page.Header().Element(ComposeHeader);
+                    page.Header().Element(CustomHeader);
                     page.Content().Element(ComposeContent);
                     
-                    page.Footer().AlignCenter().Text(text =>
+                    page.Footer().Border(1).Padding(4).AlignLeft().Text(text =>
                     {
-                        text.Span(" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin eget ligula vehicula, efficitur massa vitae, ullamcorper ligula. Nulla at varius nunc. Quisque nec scelerisque velit. Vestibulum accumsan, lacus vitae auctor commodo, elit elit posuere mauris, vel mollis risus risus ut nibh. Phasellus risus velit, tincidunt eu molestie et, maximus ut velit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Etiam eu arcu vel metus iaculis maximus at in purus. Proin diam eros, sodales vel faucibus ut, varius id metus. Donec sed ipsum a mauris varius fringilla. Nulla a nulla quis tellus finibus vehicula.");
+                        text.Span("Secondary Cal Device (For Environmental Data):\n\nUncertainty Statement: The accuracy of measurement is determined by the standards uncertainty, with a coverage factor of k=2 (confidence of roughly 95%).");
                     });
                 });
         }
 
-        void ComposeHeader(IContainer container)
+        void CustomHeader(IContainer container)
         {
             container.Row(row =>
             {
-                
-                row.ConstantItem(100).Image(LogoImage);
-                row.RelativeItem().PaddingHorizontal(10).Column(column =>
+
+                row.ConstantItem(133).Image(LogoImage);
+                row.RelativeItem().Stack(stack =>
                 {
-                    column.Item().Text(text =>
+                    stack.Item().PaddingHorizontal(10).Column(column =>
                     {
-                        text.Span("518 Route 9, PO Box 357, West Chesterfield, NH 03466").FontSize(6);
-                        // text.Span($"{Sheet.IssueDate:d}");
-                    });
-                    column.Item().Text(text =>
-                    {
-                        text.Span("Phone: 603.256.6100   Cell: 603.801.4551").FontSize(6);
-                    });
-
-                    column.Item().Text(text =>
-                    {
-                        text.Span("CERTIFICATE OF CALIBRATION")
-                            .FontSize(12)
-                            .SemiBold()
-                            .FontColor(Colors.Blue.Medium);
-                        text.AlignCenter();
-
-                        
-                    });
-                    column.Item().Text(text =>
-                    {
-                        // Instrument
-                        // CustomerName
-                        // CustomerAddress
-                        // ControlNumber
-                        // SerialNumber
-                        // Accuracy
-                        // BarometricPressure
-                        // Temperature
-                        // Humidity
-                        text.Span("Issue date: ").SemiBold();
-                        // text.Span($"{Sheet.IssueDate:d}");
+                        column.Item().Text(text =>
+                        {
+                            text.Span("Customer:").FontSize(12);
+                        });
+                        column.Item().Text(text =>
+                        {
+                            text.Span("Onsite cal (yes/no):").FontSize(12);
+                        });
+                        column.Item().Text(text =>
+                        {
+                            text.Span("Control Doc#:").FontSize(12);
+                        });
+                        column.Item().Text(text =>
+                        {
+                            text.Span("Technician:").FontSize(12);
+                            // text.Span($"{Sheet.IssueDate:d}");
+                        });
                     });
                 });
+                row.ConstantItem(80).Image(CertImage);
 
             });
+
         }
 
         void ComposeContent(IContainer container)
         {
-            container.PaddingVertical(40).Column(column =>
+            container.PaddingVertical(0).Column(column =>
             {
+                column.Item().Text(text =>
+                {
+                    text.Span("Calibration")
+                        .FontSize(16)
+                        .Bold()
+                        .FontColor(Colors.Black);
+                    text.AlignCenter();
+            
+                });   
                 column.Spacing(20);
 
                 column.Item().Row(row =>
                 {
-                    row.RelativeItem().Component(new AddressComponent("From"));
-                    row.ConstantItem(50);
-                    row.RelativeItem().Component(new AddressComponent("For"));
+                    row.RelativeItem().Component(new InstrumentComponent());
+                    row.ConstantItem(25);
+                    row.RelativeItem().Component(new CalDeviceComponent());
+                    row.ConstantItem(25);
+                    row.RelativeItem().Component(new EnvironmentComponent());
                 });
 
                 foreach (var transducer in Sheet.Transducers) {
                     column.Item().Component(new TableComponent(transducer));
                 }
-
-                // var totalPrice = Sheet.Items.Sum(x => x.Price * x.Quantity);
-                // column.Item().PaddingRight(5).AlignRight().Text($"Grand total: {totalPrice:C}").SemiBold();
-
-                // if (!string.IsNullOrWhiteSpace(Sheet.Comments))
-                    // column.Item().PaddingTop(25).Element(ComposeComments);
             });
         }
 
@@ -129,13 +122,11 @@ namespace BenchtopPDF
         }
     }
     
-    public class AddressComponent : IComponent
+    public class InstrumentComponent : IComponent
     {
-        private string Title { get; }
     
-        public AddressComponent(string title)
+        public InstrumentComponent()
         {
-            Title = title;
         }
         
         public void Compose(IContainer container)
@@ -143,9 +134,60 @@ namespace BenchtopPDF
             container.ShowEntire().Column(column =>
             {
                 column.Spacing(2);
+                column.Item().Text("Instrument").Underline();
+                column.Item().Text("Model: ");
+                column.Item().Text("Serial #:");
+                column.Item().Text("Channel:");
+                column.Item().Text("Transducer Model:");
+                column.Item().Text("Transducer Span:");
+            });
+        }
+    }
     
-                column.Item().Text(Title).SemiBold();
-                column.Item().PaddingBottom(5).LineHorizontal(1); 
+    
+    
+    public class CalDeviceComponent : IComponent
+    {
+    
+        public CalDeviceComponent()
+        {
+        }
+        
+        public void Compose(IContainer container)
+        {
+            container.ShowEntire().Column(column =>
+            {
+                column.Spacing(2);
+                column.Item().Text("Primary Cal Device:").Underline();
+                column.Item().Text("Model:");
+                column.Item().Text("Serial #:");
+                column.Item().Text("Cal Date:");
+                column.Item().Text("Cal Due Date:");
+                column.Item().Text("Cert ID:");
+                column.Item().PaddingBottom(5); 
+            });
+        }
+    }
+    
+    
+    
+    
+    public class EnvironmentComponent : IComponent
+    {
+        
+        public void Compose(IContainer container)
+        {
+            container.ShowEntire().Column(column =>
+            {
+                column.Spacing(2);
+    
+                column.Item().Text("Cal Date:").Bold();
+                column.Item().Text("Cal Due Date:").Bold();
+                column.Item().Text("Environmental Data").Underline();
+                column.Item().Text("Baro (Psi):");
+                column.Item().Text("Temp (*F):");
+                column.Item().Text("Humidity (%RF)");
+                column.Item().PaddingBottom(5); 
             });
         }
     }
@@ -164,6 +206,8 @@ namespace BenchtopPDF
             var headerStyle = TextStyle.Default.SemiBold();
             container
                 .DefaultTextStyle(x => x.FontSize(10))
+                .Border(1)
+                .BorderColor(Colors.Grey.Lighten2)
                 .Table(table =>
             {
                 table.ColumnsDefinition(columns =>
@@ -178,67 +222,66 @@ namespace BenchtopPDF
                 
                 table.Header(header =>
                 {
-                    header.Cell().ColumnSpan(6).PaddingBottom(0).BorderBottom(1)
-                        .BorderColor(Colors.Black).AlignCenter().Text($"Data (IN {t.Unit})");
+                    // header.Cell().ColumnSpan(6).PaddingBottom(0).BorderBottom(1)
+                    //     .BorderColor(Colors.Black).AlignCenter().Text($"Data (IN {t.Unit})");
 
-                    header.Cell().AlignCenter().Text("Point #").Style(headerStyle);
-                    header.Cell().AlignRight().Text("Master Value").Style(headerStyle);
+                    header.Cell().AlignCenter().Text("Gauge Reading").Style(headerStyle);
+                    header.Cell().AlignRight().Text("Accuracy (\u00b1 FS)").Style(headerStyle);
                     header.Cell().AlignRight().Text("Low Limit").Style(headerStyle);
-                    header.Cell().AlignRight().Text("DUT").Style(headerStyle);
                     header.Cell().AlignRight().Text("High Limit").Style(headerStyle);
-                    header.Cell().AlignRight().Text("Delta").Style(headerStyle);
+                    header.Cell().AlignRight().Text("As Found (units)").Style(headerStyle);
+                    header.Cell().AlignRight().Text("OOT").Style(headerStyle);
                     
                 });
-                
-                foreach (var i in t.GaugeReading)
+
+                for (var idx = 0; idx < t.GaugeReading.Count; idx++)
                 {
+                    var i = t.GaugeReading[idx];
                     var index = t.GaugeReading.IndexOf(i) + 1;
                     var masterValue = t.MasterValue[t.GaugeReading.IndexOf(i)];
-
-                    if (i.InRange)
-                    {
-                        StandardRow(table, index, masterValue, i.Value, i.Delta);
-                    }
-                    else
-                    {
-                        OutOfRangeRow(table, index, masterValue, i.Value, i.Delta);
-                    }
+                    var darken = (idx % 2 == 0);
+                    MakeRow(table, index, masterValue, i.Value, i.Delta, darken);
                 }
             });
         }
 
-        private void StandardRow(TableDescriptor table, int index, MasterValue masterValue, int value, int delta)
+        private void MakeRow(TableDescriptor table, int index, MasterValue masterValue, int value, int delta, bool darken)
         {
-            static IContainer CellStyle(IContainer container) => container
-                .DefaultTextStyle(x => x.FontSize(8))
-                .BorderBottom(1)
-                .BorderColor(Colors.Grey.Medium)
-                .PaddingVertical(2);
+            IContainer CellStyle(IContainer container)
+            {
+                if (darken)
+                {
+                    return container
+                        .DefaultTextStyle(x => x.FontSize(8))
+                        .Border(1)
+                        .BorderColor(Colors.Grey.Lighten2)
+                        .Background(Colors.Grey.Lighten3)
+                        .Padding(2);
+                }
+                return container
+                    .DefaultTextStyle(x => x.FontSize(8))
+                    .Border(1)
+                    .BorderColor(Colors.Grey.Lighten2)
+                    .Padding(2);
+            }
 
-            table.Cell().Element(CellStyle).AlignCenter().Text($"{index}");
+            /*
+             * "Gauge Reading"
+             * "Accuracy"
+             * "Low Limit"
+             * "High Limit"
+             * "As Found"
+             * "OOT"
+             */
+
             table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.Value / 1000.0:F3}");
+            table.Cell().Element(CellStyle).AlignRight().Text("---");
             table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.LowLimit / 1000.0:F3}");
-            table.Cell().Element(CellStyle).AlignRight().Text($"{value / 1000.0:F3}");
             table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.HighLimit / 1000.0:F3}");
+            table.Cell().Element(CellStyle).AlignRight().Text($"{value / 1000.0:F3}");
             table.Cell().Element(CellStyle).AlignRight().Text($"{delta / 1000.0:F3}");
         }
         
-        private void OutOfRangeRow(TableDescriptor table, int index, MasterValue masterValue, int value, int delta)
-        {
-            static IContainer CellStyle(IContainer container) => container
-                .DefaultTextStyle(x => x.FontSize(8))
-                .BorderBottom(1)
-                .BorderColor(Colors.Grey.Lighten3)
-                .Background(Colors.Grey.Lighten3)
-                .PaddingVertical(5);
-
-            table.Cell().Element(CellStyle).AlignCenter().Text($"{index}").FontSize(10);
-            table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.Value / 1000.0:F3}").FontSize(10);
-            table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.LowLimit / 1000.0:F3}").FontSize(10);
-            table.Cell().Element(CellStyle).AlignRight().Text($"{value / 1000.0:F3}").FontSize(10).FontColor(Colors.Red.Medium);
-            table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.HighLimit / 1000.0:F3}").FontSize(10);
-            table.Cell().Element(CellStyle).AlignRight().Text($"{delta / 1000.0:F3}").FontSize(10);
-        }
 
     }
 }

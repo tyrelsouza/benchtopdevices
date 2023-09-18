@@ -1,8 +1,8 @@
-TRANSDUCER\d  - array of TRANSDUCERS
+TRANSDUCER - array of TRANSDUCERS
 - Instrument Pressure \d # As Found
 - Master Value \d   # Gauge Reading Set Point
-- Note: IP1 = MV1 
-    
+- Note: IP1 = MV1
+
 Once selected, prompt for "As Found", "As Left", or "Both"
 - If as left, proppt for as found file. etc etc.
 - If both, continue on with logic.
@@ -34,11 +34,11 @@ Calculations: etc
 - SCCM - FLOW
 - TRANSDUCER1 Will ALWAYS be pressure
 
-CONFIG: 
+CONFIG:
 - Mensor Numbers etc
 	- Cal device, cal serial, Cal cal date, cal due date
-	
-	
+
+
 # HARDWARE CALIBRATION
  -  "Mass Flow Trans"  look at `Instrument Flow` and `Master Reading`
  -  "Pressure Transducer"  `Instrument Pressure` and `Master Value`
