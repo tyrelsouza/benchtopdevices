@@ -1,13 +1,7 @@
 from django.contrib import admin
-from sheets.models import (
-    Configuration,
+from .models import (
     Sheet
 )
-
-class ConfigurationAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(Configuration, ConfigurationAdmin)
 
 
 class SheetAdmin(admin.ModelAdmin):

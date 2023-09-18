@@ -279,7 +279,7 @@ namespace BenchtopPDF
             table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.LowLimit / 1000.0:F3}");
             table.Cell().Element(CellStyle).AlignRight().Text($"{masterValue.HighLimit / 1000.0:F3}");
             table.Cell().Element(CellStyle).AlignRight().Text($"{value / 1000.0:F3}");
-            table.Cell().Element(CellStyle).AlignRight().Text($"{delta / 1000.0:F3}");
+            table.Cell().Element(CellStyle).AlignRight().Text($"---");
         }
         
 

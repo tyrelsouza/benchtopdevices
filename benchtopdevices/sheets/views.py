@@ -1,9 +1,9 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .forms import SheetForm, SheetForm
 from django.core.exceptions import ValidationError
-from .parsers import parse_transducer, parse_hardware_calibration
 
+from .forms import SheetForm, SheetForm
+from .parsers import parse_transducer, parse_hardware_calibration
 
 
 def upload_file(request):
@@ -23,7 +23,9 @@ def upload_file(request):
                 pass
             else:
                 raise ValidationError("Please provide proper files")
-            return HttpResponseRedirect("/success/url/")
+            f.save()
+            breakpoint()
+            return HttpResponseRedirect("/")
     else:
         form = SheetForm()
     return render(request, "sheets/upload.html", {"form": form})
