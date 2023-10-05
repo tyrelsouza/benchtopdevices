@@ -17,9 +17,11 @@ def upload_file(request):
             if both:
                 if data['report_type'] == "TV":
                     tv = parse_transducer(both.read().decode(), data['accuracy'])
+                    f.transducer_type = tv["Transducer Type"]
                 else:
                     hc = parse_hardware_calibration(both.read().decode(), data['accuracy'])
             elif as_found and as_left:
+                # TODO: DO THIS
                 pass
             else:
                 raise ValidationError("Please provide proper files")

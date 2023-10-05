@@ -16,6 +16,8 @@ class SheetForm(forms.ModelForm):
             "technician",
 
             "instrument_model",
+            "instrument_calibration_date",
+            "instrument_calibration_due_date",
             "serial_number",
             "channel",
             "transducer_model",
@@ -32,6 +34,8 @@ class SheetForm(forms.ModelForm):
             "temperature",
             "humidity",
             "report_type",
+            "transducer_type",
+
             "as_found",
             "as_left",
             "both",
@@ -42,9 +46,10 @@ class SheetForm(forms.ModelForm):
             "barometric_pressure": forms.NumberInput(attrs={'step': 0.01, 'max': 1100, 'min': 800}),
             "temperature": forms.NumberInput(attrs={'step': 0.01, 'max': 1000.0, 'min': -459.67}),
             "humidity": forms.NumberInput(attrs={'step': 0.01, 'max': 100.0, 'min': 0.0}),
-            "calibration_date": forms.SelectDateWidget(),
-            "calibration_due_date": forms.SelectDateWidget(),
-
+            "calibration_date": forms.SelectDateWidget(years=range(2020, 2030)),
+            "calibration_due_date": forms.SelectDateWidget(years=range(2020, 2030)),
+            "instrument_calibration_date": forms.SelectDateWidget(years=range(2020, 2030)),
+            "instrument_calibration_due_date": forms.SelectDateWidget(years=range(2020, 2030)),
         }
 
     def __init__(self, *args, **kwargs):

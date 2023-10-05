@@ -4,6 +4,8 @@ from django.utils.translation import gettext_lazy as _
 
 class Sheet(models.Model):
     instrument_model = models.CharField(max_length=256)
+    instrument_calibration_date = models.DateField()
+    instrument_calibration_due_date = models.DateField()
     serial_number = models.CharField(max_length=256)
     channel = models.CharField(max_length=256)
     transducer_model = models.CharField(max_length=256)
@@ -34,6 +36,17 @@ class Sheet(models.Model):
     report_type = models.CharField(
         max_length=256,
         choices=CHOICES, 
+    )
+
+    TRANSDUCER_TYPES = [
+        ('Pressure', _('Pressure Transducer')),
+        ('Flow', _('Flow Transducer'))
+    ]
+
+    transducer_type = models.CharField(
+        max_length=256,
+        choices=TRANSDUCER_TYPES,
+        blank=True
     )
 
     as_found = models.FileField(blank=True)
