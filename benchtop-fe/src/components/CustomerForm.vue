@@ -33,17 +33,11 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'CustomerForm',
-  data() {
-    return {
-      customer_name: "",
-      onsite_cal: false,
-      control_doc: "",
-      technician: "",
-    }
+<script setup>
+import { ref, defineProps } from 'vue'
 
-  }
-}
+const customer_name = ref("")
+const onsite_cal = ref(false)
+const control_doc = ref("")
+const technician = ref("")
 </script>

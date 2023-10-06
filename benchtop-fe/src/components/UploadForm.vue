@@ -65,67 +65,47 @@
     </table>
   </div>
 </template>
-<script>
-import {ref} from 'vue'
-import VueUploadComponent from 'vue-upload-component'
 
-export default {
-  name: 'UploadForm',
-  data: function () {
-    return {
-      report_type: "",
-      files: [],
-      upload: ref(null),
-    }
-  },
-  components: {
-    FileUpload: VueUploadComponent
-  },
-  methods: {
-    /**
-     * Has changed
-     * @param  Object|undefined   newFile   Read only
-     * @param  Object|undefined   oldFile   Read only
-     * @return undefined
-     */
-    inputFile(newFile, oldFile) {
-      if (newFile && oldFile && !newFile.active && oldFile.active) {
-        // Get response data
-        console.log('response', newFile.response)
-        if (newFile.xhr) {
-          //  Get the response status code
-          console.log('status', newFile.xhr.status)
-        }
-      }
-    },
-    /**
-     * Pretreatment
-     * @param  Object|undefined   newFile   Read and write
-     * @param  Object|undefined   oldFile   Read only
-     * @param  Function           prevent   Prevent changing
-     * @return undefined
-     */
-    inputFilter(newFile, oldFile, prevent) {
-      if (newFile && !oldFile) {
-        // Filter non-image file
-        if (!/\.(txt)$/i.test(newFile.name)) {
-          return prevent()
-        }
-      }
 
-      // Create a blob field
-      newFile.blob = ''
-      let URL = window.URL || window.webkitURL
-      if (URL && URL.createObjectURL) {
-        newFile.blob = URL.createObjectURL(newFile.file)
-      }
-      console.log(URL)
-    },
-    kindChange(opt, file) {
-      // Change the file kind metadata, (both, as found, as left) for the uploaded file
-      file.kind = opt
-      console.log(file)
+<script setup>
+import { ref, defineProps } from 'vue'
+import {VueUploadComponent as FileUpload} from 'vue-upload-component'
+
+const report_type = ref('')
+const files = ref([])
+const upload = ref(null)
+
+const inputFile = (newFile, oldFile) => {
+  if (newFile && oldFile && !newFile.active && oldFile.active) {
+    // Get response data
+    console.log('response', newFile.response)
+    if (newFile.xhr) {
+      // Get the response status code
+      console.log('status', newFile.xhr.status)
     }
   }
+}
+
+const inputFilter = (newFile, oldFile, prevent) => {
+  if (newFile && !oldFile) {
+    // Filter non-image file
+    if (!/\.(txt)$/i.test(newFile.name)) {
+      return prevent()
+    }
+  }
+
+  // Create a blob field
+  newFile.blob = ''
+  const URL = window.URL || window.webkitURL
+  if (URL && URL.createObjectURL) {
+    newFile.blob = URL.createObjectURL(newFile.file)
+  }
+  console.log(URL)
+}
+
+const kindChange = (opt, file) => {
+  // Change the file kind metadata, (both, as found, as left) for the uploaded file
+  file.kind = opt
+  console.log(file)
 }
 </script>

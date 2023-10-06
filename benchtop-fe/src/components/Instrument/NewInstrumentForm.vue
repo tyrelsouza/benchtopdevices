@@ -50,24 +50,18 @@
     </table>
   </div>
 </template>
-<script>
+<script setup>
+import { ref, defineProps } from 'vue'
+
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
-export default {
-  components: {VueDatePicker},
-  name: 'NewInstrumentForm',
-  data() {
-    return {
-      channel: "",
-      serial_number: "",
-      instrument_model: "",
-      transducer_model: "",
-      transducer_span: "",
-      instrument_calibration_due_date: "",
-      instrument_calibration_date: "",
-      flow: ['year', 'month', 'calendar']
-    }
-  },
-}
+const channel = ref("")
+const serial_number = ref("")
+const instrument_model = ref("")
+const transducer_model = ref("")
+const transducer_span = ref("")
+const instrument_calibration_due_date = ref("")
+const instrument_calibration_date = ref("")
+const flow = ['year', 'month', 'calendar']
 </script>

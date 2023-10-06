@@ -34,16 +34,11 @@
     </table>
   </div>
 </template>
-<script>
-export default {
-  name: 'EnvironmentForm',
-  data() {
-    return {
-      accuracy: 0.05,
-      barometric_pressure: 1013.25,
-      temperature: 50.0,
-      humidity: 50.0
-    }
-  }
-}
+<script setup>
+import { ref, defineProps } from 'vue'
+
+const accuracy = ref(0.05)
+const barometric_pressure = ref(1013.25)
+const temperature = ref(50.0)
+const humidity = ref(50.0)
 </script>

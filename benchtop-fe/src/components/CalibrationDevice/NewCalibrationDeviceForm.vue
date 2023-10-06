@@ -37,22 +37,15 @@
     </table>
   </div>
 </template>
-<script>
+<script setup>
+import { ref, defineProps } from 'vue'
+
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
-
-export default {
-  components: {VueDatePicker},
-  name: 'NewCalibrationDeviceForm',
-  data() {
-    return {
-      calibration_model: "",
-      calibration_serial: "",
-      calibration_cert_id: "",
-      calibration_due_date: "",
-      calibration_date: "",
-      flow: ['year', 'month', 'calendar']
-    }
-  },
-}
+const calibration_model = ref( "")
+const calibration_serial = ref( "")
+const calibration_cert_id = ref( "")
+const calibration_due_date = ref( "")
+const calibration_date = ref( "")
+const flow = ref( ['year', 'month', 'calendar'])
 </script>
