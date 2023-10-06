@@ -43,7 +43,7 @@ import '@vuepic/vue-datepicker/dist/main.css';
 
 export default {
   components: {VueDatePicker},
-  name: 'CalibrationDeviceForm',
+  name: 'NewCalibrationDeviceForm',
   data() {
     return {
       calibration_model: "",

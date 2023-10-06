@@ -16,8 +16,17 @@
       <tr>
         <td colspan=2>
           <ul>
-            <li v-for="file in files">
+            <li v-for="file in files" :key="file.id">
               {{ file.name }}
+                <label>
+                  <input type="radio" name="alignment" value="both" @change="kindChange('both', file)"> Both
+                </label>
+                <label>
+                    <input type="radio" name="alignment" value="left" @change="kindChange('left', file)"> As Left
+                </label>
+                <label>
+                    <input type="radio" name="alignment" value="found" @change="kindChange('found', file)"> As Found
+                </label>
             </li>
           </ul>
           <file-upload
@@ -79,7 +88,7 @@ export default {
      * @param  Object|undefined   oldFile   Read only
      * @return undefined
      */
-    inputFile: function (newFile, oldFile) {
+    inputFile(newFile, oldFile) {
       if (newFile && oldFile && !newFile.active && oldFile.active) {
         // Get response data
         console.log('response', newFile.response)
@@ -96,7 +105,7 @@ export default {
      * @param  Function           prevent   Prevent changing
      * @return undefined
      */
-    inputFilter: function (newFile, oldFile, prevent) {
+    inputFilter(newFile, oldFile, prevent) {
       if (newFile && !oldFile) {
         // Filter non-image file
         if (!/\.(txt)$/i.test(newFile.name)) {
@@ -110,6 +119,12 @@ export default {
       if (URL && URL.createObjectURL) {
         newFile.blob = URL.createObjectURL(newFile.file)
       }
+      console.log(URL)
+    },
+    kindChange(opt, file) {
+      // Change the file kind metadata, (both, as found, as left) for the uploaded file
+      file.kind = opt
+      console.log(file)
     }
   }
 }

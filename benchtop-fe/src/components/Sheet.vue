@@ -1,31 +1,31 @@
-<script setup>
-import CustomerForm from "./CustomerForm.vue";
-import InstrumentForm from "./InstrumentForm.vue";
-import CalibrationDeviceForm from "./CalibrationDeviceForm.vue";
-import EnvironmentForm from "./EnvironmentForm.vue";
-import UploadForm from "./UploadForm.vue";
-
-</script>
-
 <template>
   <div>
     <div class="item card">
-      <UploadForm/>
+      <UploadForm />
     </div>
   </div>
+
   <div class="container">
     <div class="item card">
-      <CustomerForm/>
+      <CustomerForm />
     </div>
     <div class="item card">
-      <EnvironmentForm/>
+      <EnvironmentForm />
     </div>
 
     <div class="item card">
-      <InstrumentForm/>
+      <NewInstrumentForm />
     </div>
     <div class="item card">
-      <CalibrationDeviceForm/>
+      <NewCalibrationDeviceForm />
     </div>
   </div>
 </template>
+
+<script setup>
+import CustomerForm from "./CustomerForm.vue";
+import NewInstrumentForm from "./Instrument/NewInstrumentForm.vue";
+import NewCalibrationDeviceForm from "./CalibrationDevice/NewCalibrationDeviceForm.vue";
+import EnvironmentForm from "./EnvironmentForm.vue";
+import UploadForm from "./UploadForm.vue";
+</script>

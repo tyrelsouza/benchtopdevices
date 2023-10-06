@@ -56,7 +56,7 @@ import '@vuepic/vue-datepicker/dist/main.css';
 
 export default {
   components: {VueDatePicker},
-  name: 'InstrumentForm',
+  name: 'NewInstrumentForm',
   data() {
     return {
       channel: "",
