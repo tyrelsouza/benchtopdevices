@@ -4,7 +4,6 @@ using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
 
-
 namespace BenchtopPDF
 {
     internal class Program
@@ -19,8 +18,7 @@ namespace BenchtopPDF
             var model = JsonConvert.DeserializeObject<Sheet>(data);
 
             var document = new SheetDocument(model);
-                document.GeneratePdfAndShow();
-
+            document.GeneratePdfAndShow();
         }
     }
 }
