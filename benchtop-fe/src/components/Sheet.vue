@@ -7,19 +7,18 @@
 
   <div class="container">
     <div class="item card">
-      <CustomerForm />
+      <CustomerForm @customerForm="customerForm" />
     </div>
     <div class="item card">
-      <EnvironmentForm />
+      <EnvironmentForm @environmentForm="environmentForm" />
     </div>
 
     <div class="item card">
-      <NewInstrumentForm />
+      <NewInstrumentForm @newInstrumentForm="newInstrumentForm" />
     </div>
     <div class="item card">
-      <NewCalibrationDeviceForm />
+      <NewCalibrationDeviceForm @newCalibrationForm="newCalibrationForm" />
     </div>
-
   </div>
 </template>
 
@@ -32,12 +31,51 @@ import NewCalibrationDeviceForm from "./CalibrationDevice/NewCalibrationDeviceFo
 import EnvironmentForm from "./EnvironmentForm.vue";
 import UploadForm from "./UploadForm.vue";
 
-const upload_form_data = ref();
+const
+  upload_form_data = ref(),
+  calibration_form_data = ref(),
+  customer_form_data = ref(),
+  environment_form_data = ref(),
+  new_instrument_form_data = ref(),
+  instrument_form_data = ref(),
+  new_calibration_form_data = ref()
+
 
 const uploadForm = (form) => {
   upload_form_data.value = form;
-}
+};
 
+const customerForm = (form) => {
+  customer_form_data.value = form;
+};
 
-const emits = defineEmits(["uploadForm"]);
+const environmentForm = (form) => {
+  environment_form_data.value = form;
+};
+
+const newInstrumentForm = (form) => {
+  new_instrument_form_data.value = form;
+};
+
+const instrumentForm = (form) => {
+  instrument_form_data.value = form;
+};
+
+const newCalibrationForm = (form) => {
+  new_calibration_form_data.value = form;
+};
+
+const calibrationForm = (form) => {
+  calibration_form_data.value = form;
+};
+
+const emits = defineEmits([
+  "uploadForm",
+  "customerForm",
+  "environmentForm",
+  "instrumentForm",
+  "newInstrumentForm",
+  "calibrationForm",
+  "newCalibrationForm",
+]);
 </script>

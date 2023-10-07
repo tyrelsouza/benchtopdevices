@@ -81,10 +81,11 @@
 <script setup>
 import { ref, computed, watchEffect } from "vue";
 
-const report_type = ref("");
-const files = ref([]);
-const current_file = ref(null);
-const doc = ref();
+const
+  report_type = ref(""),
+  files = ref([]),
+  current_file = ref(null),
+  doc = ref();
 
 const showUpload = computed({
   get() {

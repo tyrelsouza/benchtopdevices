@@ -34,10 +34,21 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue'
+import { ref, watchEffect } from 'vue'
 
-const customer_name = ref("")
-const onsite_cal = ref(false)
-const control_doc = ref("")
-const technician = ref("")
+const
+  customer_name = ref(""),
+  onsite_cal = ref(false),
+  control_doc = ref(""),
+  technician = ref("")
+
+const emit = defineEmits();
+watchEffect(() => {
+  emit("customer-form", {
+    customer_name,
+    onsite_cal,
+    control_doc,
+    technician,
+  });
+});
 </script>
