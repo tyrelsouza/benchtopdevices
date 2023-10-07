@@ -5,6 +5,7 @@ body {
 
 .card {
     border: 1px solid;
+    min-height: 300px;
 }
 .card-header{
     font-size: 2rem;

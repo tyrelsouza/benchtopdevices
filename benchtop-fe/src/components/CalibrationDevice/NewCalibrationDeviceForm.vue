@@ -1,5 +1,5 @@
 <template>
-  <div class="card-header">Primary Calibration Device</div>
+  <div class="card-header">Primary Cal Device</div>
   <div class="card-body">
     <table class="table">
       <tbody>

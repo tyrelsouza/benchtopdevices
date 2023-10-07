@@ -14,11 +14,14 @@
     </div>
 
     <div class="item card">
-      <NewInstrumentForm @newInstrumentForm="newInstrumentForm" />
+      <InstrumentForm @instrumentForm="instrumentForm" />
+      <!-- <NewInstrumentForm @newInstrumentForm="newInstrumentForm" /> -->
     </div>
     <div class="item card">
-      <NewCalibrationDeviceForm @newCalibrationForm="newCalibrationForm" />
+      <CalibrationDeviceForm @calibrationForm="calibrationForm" />
+      <!-- <NewCalibrationDeviceForm @newCalibrationForm="newCalibrationForm" /> -->
     </div>
+
   </div>
 </template>
 
@@ -27,7 +30,9 @@ import { ref, defineEmits } from "vue";
 
 import CustomerForm from "./CustomerForm.vue";
 import NewInstrumentForm from "./Instrument/NewInstrumentForm.vue";
+import InstrumentForm from "./Instrument/InstrumentForm.vue";
 import NewCalibrationDeviceForm from "./CalibrationDevice/NewCalibrationDeviceForm.vue";
+import CalibrationDeviceForm from "./CalibrationDevice/CalibrationDeviceForm.vue";
 import EnvironmentForm from "./EnvironmentForm.vue";
 import UploadForm from "./UploadForm.vue";
 

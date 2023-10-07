@@ -81,8 +81,7 @@
 <script setup>
 import { ref, computed, watchEffect } from "vue";
 
-const
-  report_type = ref(""),
+const report_type = ref(""),
   files = ref([]),
   current_file = ref(null),
   doc = ref();
