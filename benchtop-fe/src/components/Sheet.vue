@@ -1,14 +1,13 @@
 <template>
-  <div>
+  <div class="container">
     <div class="item card">
       <UploadForm @uploadForm="uploadForm" />
     </div>
-  </div>
 
-  <div class="container">
     <div class="item card">
       <CustomerForm @customerForm="customerForm" />
     </div>
+
     <div class="item card">
       <EnvironmentForm @environmentForm="environmentForm" />
     </div>
@@ -24,6 +23,8 @@
         @newInstrumentForm="newInstrumentForm"
       />
     </div>
+
+
     <div class="item card">
       <CalibrationDeviceForm
         v-if="!show_new_calibration"

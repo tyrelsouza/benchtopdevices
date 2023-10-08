@@ -4,23 +4,29 @@
     <table class="table">
       <tbody>
         <tr>
-          <td>
+          <td colspan="2">
             <h3>Calibration Date</h3>
-            <VueDatePicker
-              v-model="date"
-              inline
-              auto-apply
-              :flow="flow"
-            ></VueDatePicker>
+            <div class="date-picker">
+              <VueDatePicker
+                v-model="date"
+                inline
+                auto-apply
+                :flow="flow"
+              ></VueDatePicker>
+            </div>
           </td>
-          <td>
+        </tr>
+        <tr>
+          <td colspan="2">
             <h3>Calibration Due Date</h3>
-            <VueDatePicker
-              v-model="due_date"
-              inline
-              auto-apply
-              :flow="flow"
-            ></VueDatePicker>
+            <div class="date-picker">
+              <VueDatePicker
+                v-model="due_date"
+                inline
+                auto-apply
+                :flow="flow"
+              ></VueDatePicker>
+            </div>
           </td>
         </tr>
         <tr>
@@ -98,15 +104,14 @@ import { ref, defineEmits, watchEffect } from "vue";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 
-const
-  channel = ref(""),
+const channel = ref(""),
   serial_number = ref(""),
   model = ref(""),
   transducer_model = ref(""),
   transducer_span = ref(""),
   due_date = ref(""),
   date = ref(""),
-  flow = ["year", "month", "calendar"]
+  flow = ["year", "month", "calendar"];
 
 const emit = defineEmits();
 watchEffect(() => {

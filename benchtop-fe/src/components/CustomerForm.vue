@@ -13,7 +13,13 @@
       <tr>
         <td>On Site Calibration</td>
         <td>
-          <input type="checkbox" name="onsite_cal" v-model="onsite_cal" id="id_onsite_cal">
+          <div class="checkbox-wrapper-55">
+          <label class="rocker rocker-small">
+            <input type="checkbox" name="onsite_cal" v-model="onsite_cal" id="id_onsite_cal">
+            <span class="switch-left">Yes</span>
+            <span class="switch-right">No</span>
+          </label>
+</div>
         </td>
       </tr>
       <tr>

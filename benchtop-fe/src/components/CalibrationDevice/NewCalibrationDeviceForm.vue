@@ -4,7 +4,7 @@
     <table class="table">
       <tbody>
         <tr>
-          <td>
+          <td colspan="2">
             <h3>Calibration Date</h3>
             <VueDatePicker
               v-model="date"
@@ -13,7 +13,9 @@
               :flow="flow"
             ></VueDatePicker>
           </td>
-          <td>
+          </tr>
+          <tr>
+          <td colspan="2">
             <h3>Calibration Due Date</h3>
             <VueDatePicker
               v-model="due_date"

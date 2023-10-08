@@ -4,8 +4,7 @@ d ..<template>
     <table class="table">
       <tbody>
         <tr>
-          <td>Report Type</td>
-          <td>
+          <td>Report Type
             <select
               name="report_type"
               v-model="report_type"
@@ -18,16 +17,19 @@ d ..<template>
             </select>
           </td>
         </tr>
-        <tr>
+        <tr v-if="showUpload">
           <td>
-            <button class="button" @click="openFileInput" v-if="showUpload">
-              Select File
+            <button class="custom-button" @click="openFileInput" v-if="showUpload">
+              Select First File
             </button>
+
           </td>
+        </tr>
+        <tr v-if="files.length > 0">
           <td>
             <ul>
-              <li v-for="(file, index) in files" :key="index">
-                <button @click="removeUpload(index)">x</button>
+              <li v-for="(file, index) in files" :key="index" class="file-list">
+                <button class="custom-button red" @click="removeUpload(index)">x</button>
                 {{ file.name }}
                 <label>
                   <input
@@ -59,22 +61,21 @@ d ..<template>
               </li>
             </ul>
 
-            <input
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input class="custom-button" type="submit" value="Generate PDF and Label" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <input
               ref="doc"
               type="file"
               style="display: none"
               @change="readFile($event)"
             />
-          </td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td align="right">
-            <input type="submit" value="Generate PDF and Label" />
-          </td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </template>
 
@@ -88,7 +89,8 @@ const report_type = ref(""),
 
 const showUpload = computed({
   get() {
-    if (files.length > 2) {
+    console.log(files.value.length)
+    if (files.value.length >= 2) {
       return false;
     }
     if (files.value.length > 0 && files.value[0].kind == "both") {

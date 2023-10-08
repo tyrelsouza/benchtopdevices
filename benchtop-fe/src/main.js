@@ -1,5 +1,7 @@
 import { createApp } from 'vue'
 import './reset.css'
+import './buttons.css'
+import './radio.css'
 import './style.css'
 import App from './App.vue'
 

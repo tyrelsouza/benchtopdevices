@@ -1,7 +1,7 @@
 <template>
   <div class="card-header">
     Instrument
-    <button @click="showNewInstrumentClick">New</button>
+    <button class="custom-button" role="button" @click="showNewInstrumentClick">+ New</button>
   </div>
   <div class="card-body">
     <table class="table">
@@ -21,6 +21,11 @@
         </tr>
       </tbody>
     </table>
+    <div class="summary">
+      <p>Enter a serial number to search for an existing <br/>
+      Primary Calibration Device, or press New to log a new device.
+      </p>
+    </div>
   </div>
 </template>
 <script setup>
