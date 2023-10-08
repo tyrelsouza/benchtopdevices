@@ -1,5 +1,8 @@
 <template>
-  <div class="card-header">Primary Cal Device</div>
+  <div class="card-header">
+    Primary Cal Device
+    <button @click="showNewCalibrationClick">New</button>
+  </div>
   <div class="card-body">
     <table class="table">
       <tbody>
@@ -23,9 +26,11 @@
 <script setup>
 import { ref, defineEmits, watchEffect } from "vue";
 
-const
-  serial = ref("")
+const serial = ref("");
 
+const showNewCalibrationClick = () => {
+  emit("show-new-calibration", true);
+};
 
 const emit = defineEmits();
 watchEffect(() => {

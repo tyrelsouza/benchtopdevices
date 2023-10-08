@@ -1,5 +1,8 @@
 <template>
-  <div class="card-header">Instrument</div>
+  <div class="card-header">
+    Instrument
+    <button @click="showNewInstrumentClick">New</button>
+  </div>
   <div class="card-body">
     <table class="table">
       <tbody>
@@ -23,9 +26,11 @@
 <script setup>
 import { ref, defineEmits, watchEffect } from "vue";
 
-const
-  serial = ref("")
+const serial = ref("");
 
+const showNewInstrumentClick = () => {
+  emit("show-new-instrument", true);
+};
 
 const emit = defineEmits();
 watchEffect(() => {

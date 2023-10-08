@@ -1,4 +1,4 @@
-<template>
+d ..<template>
   <div class="card-header">Report Uploads</div>
   <div class="card-body">
     <table class="table">

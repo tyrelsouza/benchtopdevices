@@ -73,12 +73,11 @@ import { ref, defineEmits, watchEffect } from "vue";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 
-const
-  model = ref(""),
+const model = ref(""),
   serial = ref(""),
   cert_id = ref(""),
   due_date = ref(""),
-  date = ref("")
+  date = ref("");
 
 const flow = ref(["year", "month", "calendar"]);
 
