@@ -33,6 +33,9 @@ body {
   margin: 0.25rem;
   margin-bottom: 2%;
   border-radius: 3px;
+  /*  purple
+   background-color: #b39ddb;
+  border: 1px solid #7e57c2; */
   background-color: #a1cbfa;
   border: 1px solid #4290e2;
   box-shadow: 0 2px 2px rgba(0,90,250,0.05),

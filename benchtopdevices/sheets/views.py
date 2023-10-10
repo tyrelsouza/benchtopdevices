@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
 
@@ -30,4 +30,4 @@ def upload_file(request):
             return HttpResponseRedirect("/")
     else:
         form = SheetForm()
-    return render(request, "sheets/upload.html", {"form": form})
+    return HttpResponse("hi")
