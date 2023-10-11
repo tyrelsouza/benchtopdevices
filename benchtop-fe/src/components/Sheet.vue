@@ -24,7 +24,6 @@
       />
     </div>
 
-
     <div class="item card">
       <CalibrationDeviceForm
         v-if="!show_new_calibration"
@@ -34,6 +33,16 @@
       <NewCalibrationDeviceForm
         v-if="show_new_calibration"
         @newCalibrationForm="newCalibrationForm"
+      />
+    </div>
+
+    <div class="item card">
+      <PDF
+        :upload="upload_form_data"
+        :customer="customer_form_data"
+        :environment="environment_form_data"
+        :instrument="new_instrument_form_data"
+        :calibration="new_calibration_form_data"
       />
     </div>
   </div>
@@ -49,16 +58,22 @@ import NewCalibrationDeviceForm from "./CalibrationDevice/NewCalibrationDeviceFo
 import CalibrationDeviceForm from "./CalibrationDevice/CalibrationDeviceForm.vue";
 import EnvironmentForm from "./EnvironmentForm.vue";
 import UploadForm from "./UploadForm.vue";
+import PDF from "./PDF/PDF.vue";
 
+// Not needed yet
+const instrument_form_data = ref(),
+  calibration_form_data = ref();
+
+// Booleans
+const show_new_instrument = ref(true),
+  show_new_calibration = ref(true);
+
+// form Data
 const upload_form_data = ref(),
-  calibration_form_data = ref(),
   customer_form_data = ref(),
   environment_form_data = ref(),
   new_instrument_form_data = ref(),
-  instrument_form_data = ref(),
-  new_calibration_form_data = ref(),
-  show_new_instrument = ref(false),
-  show_new_calibration = ref(false);
+  new_calibration_form_data = ref();
 
 const uploadForm = (form) => {
   upload_form_data.value = form;
@@ -107,3 +122,10 @@ const emits = defineEmits([
   "showNewCalibration",
 ]);
 </script>
+
+<style scoped>
+body {
+  margin: 1rem;
+  background: url("/public/funky-lines.webp");
+}
+</style>

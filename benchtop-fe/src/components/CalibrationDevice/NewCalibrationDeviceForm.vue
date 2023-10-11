@@ -9,17 +9,19 @@
             <VueDatePicker
               v-model="date"
               inline
+              :enableTimePicker="false"
               auto-apply
               :flow="flow"
             ></VueDatePicker>
           </td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
           <td colspan="2">
             <h3>Calibration Due Date</h3>
             <VueDatePicker
               v-model="due_date"
               inline
+              :enableTimePicker="false"
               auto-apply
               :flow="flow"
             ></VueDatePicker>

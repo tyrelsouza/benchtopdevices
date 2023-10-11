@@ -10,6 +10,7 @@
               <VueDatePicker
                 v-model="date"
                 inline
+                :enableTimePicker="false"
                 auto-apply
                 :flow="flow"
               ></VueDatePicker>
@@ -22,6 +23,7 @@
             <div class="date-picker">
               <VueDatePicker
                 v-model="due_date"
+                :enableTimePicker="false"
                 inline
                 auto-apply
                 :flow="flow"
@@ -109,8 +111,8 @@ const channel = ref(""),
   model = ref(""),
   transducer_model = ref(""),
   transducer_span = ref(""),
-  due_date = ref(""),
-  date = ref(""),
+  due_date = ref(new Date),
+  date = ref(new Date),
   flow = ["year", "month", "calendar"];
 
 const emit = defineEmits();

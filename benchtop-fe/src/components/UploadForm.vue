@@ -1,4 +1,4 @@
-d ..<template>
+<template>
   <div class="card-header">Report Uploads</div>
   <div class="card-body">
     <table class="table">
@@ -63,11 +63,7 @@ d ..<template>
 
           </td>
         </tr>
-        <tr>
-          <td>
-            <input class="custom-button" type="submit" value="Generate PDF and Label" />
-          </td>
-        </tr>
+
       </tbody>
     </table>
     <input
