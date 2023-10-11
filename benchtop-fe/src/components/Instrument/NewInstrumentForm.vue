@@ -9,9 +9,8 @@
             <div class="date-picker">
               <VueDatePicker
                 v-model="date"
-                inline
-                :enableTimePicker="false"
                 auto-apply
+                :enableTimePicker="false"
                 :flow="flow"
               ></VueDatePicker>
             </div>
@@ -24,7 +23,6 @@
               <VueDatePicker
                 v-model="due_date"
                 :enableTimePicker="false"
-                inline
                 auto-apply
                 :flow="flow"
               ></VueDatePicker>

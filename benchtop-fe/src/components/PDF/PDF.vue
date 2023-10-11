@@ -106,36 +106,36 @@
             </thead>
             <tbody>
               <tr>
-                <td>-12.500</td>
-                <td>0.050%</td>
-                <td>-12.510</td>
-                <td>-12.490</td>
-                <td>-12.500</td>
-                <td>0</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
               </tr>
               <tr>
-                <td>-12.500</td>
-                <td>0.050%</td>
-                <td>-12.510</td>
-                <td>-12.490</td>
-                <td>-12.500</td>
-                <td>0</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
               </tr>
               <tr>
-                <td>-12.500</td>
-                <td>0.050%</td>
-                <td>-12.510</td>
-                <td>-12.490</td>
-                <td>-12.500</td>
-                <td>0</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
               </tr>
               <tr>
-                <td>-12.500</td>
-                <td>0.050%</td>
-                <td>-12.510</td>
-                <td>-12.490</td>
-                <td>-12.500</td>
-                <td>0</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
               </tr>
               <tr>
                 <td>&nbsp;</td>
@@ -204,36 +204,36 @@
             </thead>
             <tbody>
               <tr>
-                <td>-12.500</td>
-                <td>0.050%</td>
-                <td>-12.510</td>
-                <td>-12.490</td>
-                <td>-12.500</td>
-                <td>0</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
               </tr>
               <tr>
-                <td>-12.500</td>
-                <td>0.050%</td>
-                <td>-12.510</td>
-                <td>-12.490</td>
-                <td>-12.500</td>
-                <td>0</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
               </tr>
               <tr>
-                <td>-12.500</td>
-                <td>0.050%</td>
-                <td>-12.510</td>
-                <td>-12.490</td>
-                <td>-12.500</td>
-                <td>0</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
               </tr>
               <tr>
-                <td>-12.500</td>
-                <td>0.050%</td>
-                <td>-12.510</td>
-                <td>-12.490</td>
-                <td>-12.500</td>
-                <td>0</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
+                <td>TBD</td>
               </tr>
               <tr>
                 <td>&nbsp;</td>
@@ -333,9 +333,8 @@ const i_date = () => {
   const year = d.getFullYear();
   const month = (d.getMonth() + 1).toString().padStart(2, "0"); // Month is zero-based, so we add 1
   const day = d.getDate().toString().padStart(2, "0");
-  return `${year}/${month}/${day}`;
+  return `${year}-${month}-${day}`;
 };
-
 
 
 const i_due_date = () => {
@@ -346,7 +345,7 @@ const i_due_date = () => {
   const year = d.getFullYear();
   const month = (d.getMonth() + 1).toString().padStart(2, "0"); // Month is zero-based, so we add 1
   const day = d.getDate().toString().padStart(2, "0");
-  return `${year}/${month}/${day}`;
+  return `${year}-${month}-${day}`;
 };
 
 const c_date = () => {
@@ -357,7 +356,7 @@ const c_date = () => {
   const year = d.getFullYear();
   const month = (d.getMonth() + 1).toString().padStart(2, "0"); // Month is zero-based, so we add 1
   const day = d.getDate().toString().padStart(2, "0");
-  return `${year}/${month}/${day}`;
+  return `${year}-${month}-${day}`;
 };
 const c_due_date = () => {
   if (props.calibration?.due_date === undefined) {
@@ -367,14 +366,14 @@ const c_due_date = () => {
   const year = d.getFullYear();
   const month = (d.getMonth() + 1).toString().padStart(2, "0"); // Month is zero-based, so we add 1
   const day = d.getDate().toString().padStart(2, "0");
-  return `${year}/${month}/${day}`;
+  return `${year}-${month}-${day}`;
 };
 
 const exportToPDF = () => {
   const element = document.getElementById("pdf");
   var opt = {
     margin: 0.4,
-    filename: "myfile.pdf",
+    filename: `${props.instrument.model}_${i_date()}.pdf`,
     image: { type: "jpeg", quality: 0.98 },
     html2canvas: { scale: 2 },
     jsPDF: { unit: "in", format: "letter", orientation: "portrait" },

@@ -8,9 +8,8 @@
             <h3>Calibration Date</h3>
             <VueDatePicker
               v-model="date"
-              inline
-              :enableTimePicker="false"
               auto-apply
+              :enableTimePicker="false"
               :flow="flow"
             ></VueDatePicker>
           </td>
@@ -20,9 +19,8 @@
             <h3>Calibration Due Date</h3>
             <VueDatePicker
               v-model="due_date"
-              inline
-              :enableTimePicker="false"
               auto-apply
+              :enableTimePicker="false"
               :flow="flow"
             ></VueDatePicker>
           </td>

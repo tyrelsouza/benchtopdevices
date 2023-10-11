@@ -11,13 +11,13 @@
               required
               id="id_report_type"
             >
-              <option value="" selected>---------</option>
+              <option value="-" selected>----Select-----</option>
               <option value="TV">Transducer Verify</option>
               <option value="HC">Hardware Calibration</option>
             </select>
           </td>
         </tr>
-        <tr v-if="showUpload">
+        <tr v-if="report_type != '-' || showUpload">
           <td>
             <button class="custom-button" @click="openFileInput" v-if="showUpload">
               Select First File
@@ -76,19 +76,32 @@
 </template>
 
 <script setup>
+/*
+
+RADIO BUTTONS ARE FUCKED
+
+
+*/
 import { ref, computed, watchEffect } from "vue";
 
-const report_type = ref(""),
+const report_type = ref("-"),
   files = ref([]),
   current_file = ref(null),
   doc = ref();
 
 const showUpload = computed({
   get() {
-    console.log(files.value.length)
+    /// default select
+    if (report_type.value === "-") {
+      return false
+    }
+
+    // no more more than 2 files
     if (files.value.length >= 2) {
       return false;
     }
+
+    // if the first item is both, disable upload
     if (files.value.length > 0 && files.value[0].kind == "both") {
       return false;
     }
