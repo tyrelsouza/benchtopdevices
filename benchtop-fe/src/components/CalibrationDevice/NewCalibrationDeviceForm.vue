@@ -80,8 +80,8 @@ import "@vuepic/vue-datepicker/dist/main.css";
 const model = ref(""),
   serial = ref(""),
   cert_id = ref(""),
-  due_date = ref(""),
-  date = ref("");
+  due_date = ref(new Date),
+  date = ref(new Date);
 
 const flow = ref(["year", "month", "calendar"]);
 
