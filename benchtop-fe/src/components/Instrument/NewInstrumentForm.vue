@@ -82,7 +82,7 @@
           </td>
         </tr>
         <tr>
-          <td>Transducer Span</td>
+          <td>Transducer Span (psia)</td>
           <td>
             <input
               type="text"
@@ -126,3 +126,4 @@ watchEffect(() => {
   });
 });
 </script>
+
