@@ -4,7 +4,9 @@
     <button class="custom-button" @click="exportToPDF">
       Generate PDF and Label
     </button>
-    <div :class="{ hide: hide }">
+    <br>
+    <br>
+    <div :class="{ hide: hide }" class="px666">
       <div id="pdf" ref="document">
         <div class="header">
           <div class="flex-container">
@@ -84,7 +86,7 @@
               </div>
               <div>
                 <span class="label">Humidity (%RH):</span
-                >{{ props.environment?.humidity }}}
+                >{{ props.environment?.humidity }}
               </div>
             </div>
           </div>
@@ -308,7 +310,7 @@ import { ref, defineProps } from "vue";
 import html2pdf from "html2pdf.js";
 import BenchTopLogoUrl from "../../assets/BenchTopLogo.png";
 import Al2pCertUrl from "../../assets/al2pCert.png";
-const hide = ref(true);
+const hide = ref(false);
 
 const props = defineProps({
   upload: Object,

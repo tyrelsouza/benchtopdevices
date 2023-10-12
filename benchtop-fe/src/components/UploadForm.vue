@@ -29,12 +29,12 @@
           <td>
             <ul>
               <li v-for="(file, index) in files" :key="index" class="file-list">
-                <button class="custom-button red" @click="removeUpload(index)">x</button>
-                {{ file.name }}
+                <button class="custom-button red" @click="removeUpload(index)">x</button> {{ file.name }}
+                <div>
                 <label>
                   <input
                     type="radio"
-                    name="alignment"
+                    :name="'kind_' + index"
                     value="both"
                     @change="kindChange('both', file)"
                   />
@@ -43,7 +43,7 @@
                 <label>
                   <input
                     type="radio"
-                    name="alignment"
+                    :name="'kind_' + index"
                     value="left"
                     @change="kindChange('left', file)"
                   />
@@ -52,12 +52,13 @@
                 <label>
                   <input
                     type="radio"
-                    name="alignment"
+                    :name="'kind_' + index"
                     value="found"
                     @change="kindChange('found', file)"
                   />
                   As Found
                 </label>
+              </div>
               </li>
             </ul>
 

@@ -1,49 +1,51 @@
 <template>
-  <div class="container">
-    <div class="item card">
-      <UploadForm @uploadForm="uploadForm" />
+  <div class="flextainer">
+    <div class="left">
+      <div class="grid">
+        <div class="grid-item item card">
+          <UploadForm @uploadForm="uploadForm" />
+        </div>
+        <div class="grid-item item card">
+          <CustomerForm @customerForm="customerForm" />
+        </div>
+        </div>
+      <div class="grid">
+        <div class="grid-item item card">
+          <EnvironmentForm @environmentForm="environmentForm" />
+        </div>
+        <div class="grid-item item card">
+          <InstrumentForm
+            v-if="!show_new_instrument"
+            @instrumentForm="instrumentForm"
+            @showNewInstrument="showNewInstrument"
+          />
+          <NewInstrumentForm
+            v-if="show_new_instrument"
+            @newInstrumentForm="newInstrumentForm"
+          />
+        </div>
+      </div>
+      <div class="grid-item item card">
+        <CalibrationDeviceForm
+          v-if="!show_new_calibration"
+          @calibrationForm="calibrationForm"
+          @showNewCalibration="showNewCalibration"
+        />
+        <NewCalibrationDeviceForm
+          v-if="show_new_calibration"
+          @newCalibrationForm="newCalibrationForm"
+        />
+      </div>
     </div>
 
-    <div class="item card">
-      <CustomerForm @customerForm="customerForm" />
-    </div>
-
-    <div class="item card">
-      <EnvironmentForm @environmentForm="environmentForm" />
-    </div>
-
-    <div class="item card">
-      <InstrumentForm
-        v-if="!show_new_instrument"
-        @instrumentForm="instrumentForm"
-        @showNewInstrument="showNewInstrument"
-      />
-      <NewInstrumentForm
-        v-if="show_new_instrument"
-        @newInstrumentForm="newInstrumentForm"
-      />
-    </div>
-
-    <div class="item card">
-      <CalibrationDeviceForm
-        v-if="!show_new_calibration"
-        @calibrationForm="calibrationForm"
-        @showNewCalibration="showNewCalibration"
-      />
-      <NewCalibrationDeviceForm
-        v-if="show_new_calibration"
-        @newCalibrationForm="newCalibrationForm"
-      />
-    </div>
-
-    <div class="item card">
-      <PDF
-        :upload="upload_form_data"
-        :customer="customer_form_data"
-        :environment="environment_form_data"
-        :instrument="new_instrument_form_data"
-        :calibration="new_calibration_form_data"
-      />
+    <div class="right">
+        <PDF
+          :upload="upload_form_data"
+          :customer="customer_form_data"
+          :environment="environment_form_data"
+          :instrument="new_instrument_form_data"
+          :calibration="new_calibration_form_data"
+        />
     </div>
   </div>
 </template>

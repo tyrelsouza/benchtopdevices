@@ -2,48 +2,27 @@
   <div class="card-header">Calibration Devices</div>
   <div class="card-body">
     <h3>Primary Device</h3>
-    <select
-      name="primary_device"
-      v-model="report_type"
-      required
-      id="id_report_type"
-    >
+    <select name="primary_device" v-model="report_type" required id="id_report_type">
       <option value="-" selected>----Primary-----</option>
       <option value="TV">Menzer1</option>
       <option value="HC">Blackbelt</option>
     </select>
-    <td colspan="2">
       <h3>Calibration Date</h3>
       <div class="date-picker">
-        <VueDatePicker
-          v-model="date"
-          auto-apply
-          :enableTimePicker="false"
-          :flow="flow"
-        ></VueDatePicker>
+        <VueDatePicker v-model="date" auto-apply :enableTimePicker="false" :flow="flow"></VueDatePicker>
       </div>
-    </td>
     <hr />
     <h3>Secondary Device</h3>
 
-    <select
-      name="secondary_device"
-      v-model="report_type"
-      required
-      id="id_report_type"
-    >
+    <select name="secondary_device" v-model="report_type" required id="id_report_type">
       <option value="-" selected>----Secondary-----</option>
       <option value="TV">Menzer1</option>
       <option value="HC">Blackbelt</option>
     </select>
+
     <h3>Calibration Date</h3>
     <div class="date-picker">
-      <VueDatePicker
-        v-model="date"
-        auto-apply
-        :enableTimePicker="false"
-        :flow="flow"
-      ></VueDatePicker>
+      <VueDatePicker v-model="date" auto-apply :enableTimePicker="false" :flow="flow"></VueDatePicker>
     </div>
   </div>
 </template>

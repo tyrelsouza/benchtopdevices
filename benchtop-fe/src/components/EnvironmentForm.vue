@@ -10,7 +10,7 @@
         </td>
       </tr>
       <tr>
-        <td>Barometric Pressure (psi)</td>
+        <td>Pressure (psi)</td>
         <td>
           <input type="number" name="pressure" step="0.01" max="1000" min="0" v-model="pressure"
                  required id="id_pressure">
