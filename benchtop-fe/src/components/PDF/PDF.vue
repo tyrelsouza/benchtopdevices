@@ -303,6 +303,9 @@
       </div>
     </div>
   </div>
+  <div>
+    {{ output() }}
+  </div>
 </template>
 
 <script setup>
@@ -310,6 +313,9 @@ import { ref, defineProps } from "vue";
 import html2pdf from "html2pdf.js";
 import BenchTopLogoUrl from "../../assets/BenchTopLogo.png";
 import Al2pCertUrl from "../../assets/al2pCert.png";
+
+import parseTransducer from "../../parsers/Transducer"
+
 const hide = ref(false);
 
 const props = defineProps({
@@ -383,9 +389,20 @@ const exportToPDF = () => {
   html2pdf().from(element).set(opt).save();
 };
 
-const dt = (d) => {
 
-};
+const output = () => {
+  let content = ""
+  if (props.upload !== undefined && props.upload.files.length > 0) {
+    const acc = props.environment.accuracy
+    content = parseTransducer(props.upload.files[0]["value"], acc)
+  }
+
+  return {
+    "form1": content
+  }
+}
+
+
 </script>
 
 <style scoped>

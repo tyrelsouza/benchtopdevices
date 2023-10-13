@@ -1,19 +1,21 @@
-inRange = (index, value, masterValues) => {
+const inRange = (index, value, masterValues) => {
   return (
       masterValues[index]["Low Limit"] <= value && value <= masterValues[index]["High Limit"]
   );
 }
 
-delta = (index, value, masterValues) => {
+const delta = (index, value, masterValues) => {
   return Math.abs(masterValues[index]["Low Limit"] - value);
 }
 
-export default parseTransducer = (content, accuracy) => {
+export default function parseTransducer(content, accuracy){
   accuracy = accuracy / 100.0; // Comes in as Percent
   const transducerData = [];
 
   // Split the content into sections based on the blank line
   const sections = content.trim().split("\n\n");
+
+  debugger
 
   for (const section of sections) {
       // Split each section into lines
@@ -25,7 +27,7 @@ export default parseTransducer = (content, accuracy) => {
 
       // Extract the Transducer number and Transducer type
       const transducerLine = filteredLines.shift().trim();
-      const [, transducerName, partNumber] = transducerLine.split(null, 2);
+      const [_, transducerName, partNumber] = transducerLine.split(null, 2);
 
       // Get part number and values
       let value = null;

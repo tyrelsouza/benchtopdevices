@@ -4,7 +4,8 @@
     <table class="table">
       <tbody>
         <tr>
-          <td>Report Type
+          <td>
+            Report Type
             <select
               name="report_type"
               v-model="report_type"
@@ -12,77 +13,78 @@
               id="id_report_type"
             >
               <option value="-" selected>----Select-----</option>
-              <option value="TV">Transducer Verify</option>
-              <option value="HC">Hardware Calibration</option>
+              <option value="Transducer Verify">Transducer Verify</option>
+              <option value="Hardware Calibration">Hardware Calibration</option>
             </select>
           </td>
         </tr>
         <tr v-if="report_type != '-' || showUpload">
           <td>
-            <button class="custom-button" @click="openFileInput" v-if="showUpload">
-              Select First File
+            <button
+              class="custom-button"
+              @click="openFileInput"
+              v-if="showUpload"
+            >
+              Select {{ report_type }} File
             </button>
-
           </td>
         </tr>
         <tr v-if="files.length > 0">
           <td>
             <ul>
               <li v-for="(file, index) in files" :key="index" class="file-list">
-                <button class="custom-button red" @click="removeUpload(index)">x</button> {{ file.name }}
-                <div>
-                <label>
+                <button class="custom-button red" @click="removeUpload(index)">
+                  X
+                </button>
+                <span>{{ file.name }}</span>
+                <div class="kind btn-group">
                   <input
                     type="radio"
+                    class="btn-check"
+                    :id="'both_kind_' + index"
                     :name="'kind_' + index"
                     value="both"
                     @change="kindChange('both', file)"
                   />
-                  Both
-                </label>
-                <label>
+                  <label class="btn btn-primary" :for="'both_kind_' + index"> Both </label>
+
                   <input
                     type="radio"
-                    :name="'kind_' + index"
-                    value="left"
-                    @change="kindChange('left', file)"
-                  />
-                  As Left
-                </label>
-                <label>
-                  <input
-                    type="radio"
+                    class="btn-check"
+                    :id="'af_kind_' + index"
                     :name="'kind_' + index"
                     value="found"
                     @change="kindChange('found', file)"
                   />
-                  As Found
-                </label>
-              </div>
+                  <label class="btn btn-primary" :for="'af_kind_' + index">
+                    As Found
+                  </label>
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    :id="'al_kind_' + index"
+                    :name="'kind_' + index"
+                    value="left"
+                    @change="kindChange('left', file)"
+                  />
+                  <label class="btn btn-primary" :for="'al_kind_' + index"> As Left </label>
+                </div>
               </li>
             </ul>
-
           </td>
         </tr>
-
       </tbody>
     </table>
     <input
-              ref="doc"
-              type="file"
-              style="display: none"
-              @change="readFile($event)"
-            />
+      ref="doc"
+      type="file"
+      style="display: none"
+      @change="readFile($event)"
+    />
   </div>
 </template>
 
 <script setup>
-/*
-
-RADIO BUTTONS ARE FUCKED
-
-
-*/
 import { ref, computed, watchEffect } from "vue";
 
 const report_type = ref("-"),
@@ -94,7 +96,7 @@ const showUpload = computed({
   get() {
     /// default select
     if (report_type.value === "-") {
-      return false
+      return false;
     }
 
     // no more more than 2 files
@@ -156,3 +158,16 @@ watchEffect(() => {
   });
 });
 </script>
+
+<style scoped>
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+button {
+  margin-right: 0.5rem;
+}
+.kind {
+  margin-top: 0.5rem;
+}
+</style>
