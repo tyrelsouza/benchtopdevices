@@ -1,4 +1,4 @@
-parseInstrumentInfo = (text) => {
+const parseInstrumentInfo = (text) => {
   const instrumentInfo = {};
   const lines = text.split("\n").slice(2);
 
@@ -12,7 +12,7 @@ parseInstrumentInfo = (text) => {
   return instrumentInfo;
 }
 
-parsePorts = (text) => {
+const parsePorts = (text) => {
   text += "\n\n"; // Ensure extra newline to match on
   const pattern = /(Test Port \d)/g;
   const matches = text.split(pattern).slice(1);
@@ -32,7 +32,7 @@ const KEEP = {
   "Pressure Transducer": ["Instrument Pressure", "Master Value"],
 };
 
-parseCalibrationData = (text) => {
+const parseCalibrationData = (text) => {
   const pattern = /(Mass Flow Trans|Pressure Transducer)\n([\s\S]+?)\n\n/g;
   const matches = [...text.matchAll(pattern)];
   const calibrationData = {};
@@ -62,7 +62,7 @@ parseCalibrationData = (text) => {
   return calibrationData;
 }
 
-export default parseHardwareCalibration = (content, accuracy) => {
+export default function parseHardwareCalibration(content, accuracy) {
   const sections = content.split("|| Hardware Calibration Report ||");
   const instrumentInfo = parseInstrumentInfo(sections[0]);
   const calibrationData = parsePorts(sections[1]);
