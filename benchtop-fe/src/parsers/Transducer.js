@@ -15,8 +15,6 @@ export default function parseTransducer(content, accuracy){
   // Split the content into sections based on the blank line
   const sections = content.trim().split("\n\n");
 
-  debugger
-
   for (const section of sections) {
       // Split each section into lines
       const lines = section.trim().split("\n");
@@ -27,15 +25,16 @@ export default function parseTransducer(content, accuracy){
 
       // Extract the Transducer number and Transducer type
       const transducerLine = filteredLines.shift().trim();
-      const [_, transducerName, partNumber] = transducerLine.split(null, 2);
+      let [transducerName, partNumber] = transducerLine.split(/\s\s+/);
 
       // Get part number and values
       let value = null;
       let unit = null;
       let transducerType = null;
       if (partNumber !== "Custom") {
-          value = partNumber.split(" ").pop();
-          partNumber = partNumber.split(" ")[1];
+          partNumber = partNumber.split(" ")
+          value = partNumber.pop();
+          partNumber = partNumber.join(" ");
           const match = value.match(/([0-9]+)([A-Z]+)/i);
           if (match) {
               [, value, unit] = match;
@@ -73,7 +72,7 @@ export default function parseTransducer(content, accuracy){
               transducerInfo["Verify Time"] = val;
           } else {
               // Toss anything else where it belongs
-              const [, cleanKey] = key.split(/\W\d/);
+              const [cleanKey, _] = key.split(/\W\d/);
               if (
                   cleanKey in transducerInfo ||
                   key.includes(`Instrument ${transducerType}`)
