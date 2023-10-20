@@ -99,7 +99,6 @@ function calculateLimitsAndTolerances(calibrationDatum, accuracy) {
         value = parseInt(value);
     }
 
-
     let limit = accuracy * value * 1000
     for (const mv of calibrationDatum["Master Values"]) {
         const reading = parseInt(mv["Value"].split(" ")[0]) * 1000;
@@ -110,10 +109,13 @@ function calculateLimitsAndTolerances(calibrationDatum, accuracy) {
     for (const i in calibrationDatum["Gauge Reading"]) {
         let gr = calibrationDatum["Gauge Reading"][i];
         const mv = calibrationDatum["Master Values"][i];
-        const value = parseInt(gr["Value"].split(" ")[0]) * 1000;
-        gr["Value"] = value;
-        gr["In Range"] = isInRange(value, mv)
-        gr["Delta"] = calculateDelta(value, mv)
+        const [val, unit] = gr["Value"].split(" ")
+        const reading = parseInt(val) * 1000;
+
+        gr["Value"] = reading; // Update the original, ignoring the units
+        gr["Unit"] = unit;
+        gr["In Range"] = isInRange(reading, mv)
+        gr["Delta"] = calculateDelta(reading, mv)
 
     }
     outOfTolerance(calibrationDatum["Gauge Reading"])
