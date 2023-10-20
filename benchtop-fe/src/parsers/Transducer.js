@@ -11,7 +11,7 @@ const delta = (index, value, masterValues) => {
   return Math.abs(masterValues[index]["Low Limit"] - value);
 }
 
-export default function parseTransducer(fileName, content, accuracy){
+export default function parseTransducer(content, accuracy){
   accuracy = accuracy / 100.0; // Comes in as Percent
   const transducerData = [];
 
@@ -101,11 +101,20 @@ export default function parseTransducer(fileName, content, accuracy){
       }
 
       // Once we have the readings and master values, we can do the math
+      // Doing Map, so we can have the paired index between GaugeReading and Master Value
       transducerInfo["Gauge Reading"] = transducerInfo["Gauge Reading"].map((v, idx) => ({
           Value: v,
           "In Range": inRange(idx, v, transducerInfo["Master Value"]),
           Delta: delta(idx, v, transducerInfo["Master Value"]),
       }));
+
+      // Calculate Out of Tolerances
+      for (const reading of transducerInfo["Gauge Reading"]) {
+          reading["Out Of Tolerance"] = 0;
+          if (!reading["In Range"]) {
+              reading["Out Of Tolerance"] = reading["Delta"];
+          }
+      }
 
       transducerData.push(transducerInfo);
   }

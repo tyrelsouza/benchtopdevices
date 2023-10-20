@@ -4,8 +4,6 @@ const fs = require('fs');
 const path = require('path');
 import parseTransducer from "../Transducer"
 
-// const file = fs.readFileSync("src/parsers/__tests__/transducer_verify.txt", 'utf8')
-
 
 function readFiles(dir) {
   const files = [];
@@ -29,7 +27,7 @@ describe("Test for all files", () => {
   let files = readFiles("src/parsers/__tests__/transducer_verify/");
   for (const file of files) {
     test(`Can parse ${file.name}`, () => {
-      const transducers = parseTransducer(file.name, file.content, 0.05)
+      const transducers = parseTransducer(file.content, 0.05)
 
       expect(transducers.length).toBeGreaterThan(0)
       for (const transducer of transducers) {
@@ -43,4 +41,21 @@ describe("Test for all files", () => {
       }
     });
   }
+});
+
+describe("Testing actual calculations", () => {
+  test("It can detect if out of tolerance", () => {
+    const content = fs.readFileSync("src/parsers/__tests__/transducer_verify/Blackbelt with flow 220601_143736 Transducer Verify.txt", 'utf8');
+    const transducers = parseTransducer(content, 0.05);
+    for (const transducer of transducers) {
+      let anyOOT = false;
+      for (const gauge of transducer["Gauge Reading"]) {
+        if (!gauge["In Range"]) {
+          anyOOT = true;
+          expect(gauge["Out Of Tolerance"]).toBeGreaterThan(0)
+        }
+      }
+      expect(anyOOT).toBeTruthy();
+    }
+  })
 });
