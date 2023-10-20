@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-import parseTransducer from "../Transducer"
+import ParseTransducer from "../Transducer"
 
 
 function readFiles(dir) {
@@ -25,7 +25,7 @@ describe("Test for all files", () => {
     let files = readFiles("src/parsers/__tests__/transducer_verify/");
     for (const file of files) {
         test(`Can parse ${file.name}`, () => {
-            const transducers = parseTransducer(file.content, 0.05)
+            const transducers = ParseTransducer(file.content, 0.05)
 
             expect(transducers.length).toBeGreaterThan(0)
             for (const transducer of transducers) {
@@ -44,7 +44,7 @@ describe("Test for all files", () => {
 describe("Testing actual calculations", () => {
     test("It can detect if out of tolerance", () => {
         const content = fs.readFileSync("src/parsers/__tests__/transducer_verify/Blackbelt with flow 220601_143736 Transducer Verify.txt", 'utf8');
-        const transducers = parseTransducer(content, 0.05);
+        const transducers = ParseTransducer(content, 0.05);
         for (const transducer of transducers) {
             let anyOOT = false;
             for (const gauge of transducer["Gauge Reading"]) {
@@ -61,13 +61,13 @@ describe("Testing actual calculations", () => {
 describe("Testing Errors", () => {
     test("Not a Transducer Verify Report", () => {
         const e = () => {
-            parseTransducer("I am a Fish", 0.05)
+            ParseTransducer("I am a Fish", 0.05)
         }
         expect(e).toThrowError(Error("Not a Transducer Verify Report"))
     })
     test("Unknown Unit", () => {
          const e = () => {
-             parseTransducer(`|| Transducer Verify Report ||\nTRANSDUCER1\n===============================================================\nTransducer 1               CTS D34-442 115FigNewtons`, 0);
+             ParseTransducer(`|| Transducer Verify Report ||\nTRANSDUCER1\n===============================================================\nTransducer 1               CTS D34-442 115FigNewtons`, 0);
          }
         expect(e).toThrowError(Error("Unknown Type of Test, do not know unit: FigNewtons"))
 

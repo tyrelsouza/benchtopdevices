@@ -93,9 +93,9 @@ function parseSection(section, accuracy) {
     // Create an object to store the data for each transducer
     const transducerInfo = {
         Accuracy: accuracy,
-        "Part Number": partNumber,
         Value: value,
         Unit: unit,
+        "Part Number": partNumber,
         "Limit ABS": value * accuracy * 1000,
         "Transducer Name": transducerName,
         "Transducer Type": transducerType,
@@ -119,7 +119,7 @@ function parseSection(section, accuracy) {
     return transducerInfo;
 }
 
-export default function parseTransducer(content, accuracy) {
+function parseTransducer(content, accuracy) {
     if (!content.includes("Transducer Verify Report")) {
         throw new Error("Not a Transducer Verify Report")
     }
@@ -137,4 +137,8 @@ export default function parseTransducer(content, accuracy) {
     }
 
     return transducerData;
+}
+
+export default function ParseTransducer(content, accuracy) {
+    return parseTransducer(content, accuracy);
 }
