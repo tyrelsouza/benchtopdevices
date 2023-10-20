@@ -1,3 +1,6 @@
+const twoNewLines = /\r\n\r\n|\r\r|\n\n/;
+const oneNewLine = /\r\n|\r|\n/;
+
 const inRange = (index, value, masterValues) => {
   return (
       masterValues[index]["Low Limit"] <= value && value <= masterValues[index]["High Limit"]
@@ -8,16 +11,16 @@ const delta = (index, value, masterValues) => {
   return Math.abs(masterValues[index]["Low Limit"] - value);
 }
 
-export default function parseTransducer(content, accuracy){
+export default function parseTransducer(fileName, content, accuracy){
   accuracy = accuracy / 100.0; // Comes in as Percent
   const transducerData = [];
 
   // Split the content into sections based on the blank line
-  const sections = content.trim().split("\n\n");
+  const sections = content.trim().split(twoNewLines);
 
   for (const section of sections) {
       // Split each section into lines
-      const lines = section.trim().split("\n");
+      const lines = section.trim().split(oneNewLine);
       const filteredLines = lines.filter(
           (line) => !line.startsWith("==") && line !== "|| Transducer Verify Report ||"
       );
@@ -73,10 +76,7 @@ export default function parseTransducer(content, accuracy){
           } else {
               // Toss anything else where it belongs
               const [cleanKey, _] = key.split(/\W\d/);
-              if (
-                  cleanKey in transducerInfo ||
-                  key.includes(`Instrument ${transducerType}`)
-              ) {
+              if (cleanKey in transducerInfo || key.includes(`Instrument ${transducerType}`)) {
                   const value = parseInt(val.split(" ")[0]) * 1000;
                   // special case Master to get the limits
                   if (cleanKey.includes("Master")) {
