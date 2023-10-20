@@ -1,3 +1,5 @@
+import {tr} from "date-fns/locale";
+
 const fs = require('fs');
 const path = require('path');
 import parseTransducer from "../Transducer"
@@ -20,20 +22,25 @@ function readFiles(dir) {
       files.push({ filepath, name, ext, stat, content });
     }
   });
-
-  files.sort((a, b) => {
-    // natural sort alphanumeric strings
-    // https://stackoverflow.com/a/38641281
-    return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
-  });
-
   return files;
 }
 
-test('Can parse any Transducer Verify file', () => {
+describe("Test for all files", () => {
   let files = readFiles("src/parsers/__tests__/transducer_verify/");
   for (const file of files) {
-    const transducer = parseTransducer(file.name, file.content, 0.05)
-    console.log(transducer)
+    test(`Can parse ${file.name}`, () => {
+      const transducers = parseTransducer(file.name, file.content, 0.05)
+
+      expect(transducers.length).toBeGreaterThan(0)
+      for (const transducer of transducers) {
+        expect(transducer).toHaveProperty("Part Number")
+        expect(transducer).toHaveProperty("Transducer Name")
+        expect(transducer).toHaveProperty("Gauge Reading")
+        expect(transducer).toHaveProperty("Master Value")
+
+        expect(transducer["Gauge Reading"].length).toBeGreaterThan(1);
+        expect(transducer["Master Value"].length).toBe(transducer["Gauge Reading"].length);
+      }
+    });
   }
 });

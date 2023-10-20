@@ -43,10 +43,12 @@ export default function parseTransducer(fileName, content, accuracy){
               [, value, unit] = match;
               value = parseInt(value);
           }
-          if (unit === "SCCM") {
+          // SCCM and LPM are Flow
+          if (unit === "SCCM" || unit === "LPM") {
               transducerType = "Flow";
           }
-          if (unit === "PSIA") {
+          // PSIA and PSID are pressure
+          if (unit === "PSIA" || unit === "PSID") {
               transducerType = "Pressure";
           }
       }

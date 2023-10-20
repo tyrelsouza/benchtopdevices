@@ -5,5 +5,5 @@ const file = fs.readFileSync("src/parsers/__tests__/hardware_calibration.txt", '
 
 test('parseHardwareCalibration', () => {
   const hardware = parseHardwareCalibration(file, 0.05)
-  console.log(hardware)
+  // console.log(hardware)
 });
