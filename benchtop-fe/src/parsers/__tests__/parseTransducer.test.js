@@ -1,32 +1,14 @@
 const fs = require('fs');
-const path = require('path');
 import ParseTransducer from "../Transducer"
+import {readFiles} from "../utils/file_utils.js";
 
-
-function readFiles(dir) {
-    const files = [];
-
-    fs.readdirSync(dir).forEach(filename => {
-        const name = path.parse(filename).name;
-        const ext = path.parse(filename).ext;
-        const filepath = path.resolve(dir, filename);
-        const stat = fs.statSync(filepath);
-        const isFile = stat.isFile();
-
-        if (isFile) {
-            const content = fs.readFileSync(filepath, 'utf8');
-            files.push({filepath, name, ext, stat, content});
-        }
-    });
-    return files;
-}
 
 describe("Test for all files", () => {
     let files = readFiles("src/parsers/__tests__/transducer_verify/");
     for (const file of files) {
         test(`Can parse ${file.name}`, () => {
             const transducers = ParseTransducer(file.content, 0.05)
-
+            console.log(transducers[0]["Master Value"])
             expect(transducers.length).toBeGreaterThan(0)
             for (const transducer of transducers) {
                 expect(transducer).toHaveProperty("Part Number")

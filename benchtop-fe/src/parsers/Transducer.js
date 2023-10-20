@@ -1,11 +1,10 @@
-const TWO_NEW_LINES = /\r\n\r\n|\r\r|\n\n/;
-const ONE_NEW_LINE = /\r\n|\r|\n/;
+import {ONE_NEW_LINE, TWO_NEW_LINES} from "./utils/constants.js";
 
-const inRange = (index, value, masterValues) => {
+const isInRange = (index, value, masterValues) => {
     return (masterValues[index]["Low Limit"] <= value && value <= masterValues[index]["High Limit"]);
 }
 
-const delta = (index, value, masterValues) => {
+const calculateDelta = (index, value, masterValues) => {
     return Math.abs(masterValues[index]["Low Limit"] - value);
 }
 
@@ -111,8 +110,8 @@ function parseSection(section, accuracy) {
     // Doing Map, so we can have the paired index between GaugeReading and Master Value
     transducerInfo["Gauge Reading"] = transducerInfo["Gauge Reading"].map((v, idx) => ({
         Value: v,
-        "In Range": inRange(idx, v, transducerInfo["Master Value"]),
-        Delta: delta(idx, v, transducerInfo["Master Value"]),
+        "In Range": isInRange(idx, v, transducerInfo["Master Value"]),
+        Delta: calculateDelta(idx, v, transducerInfo["Master Value"]),
     }));
 
     outOfTolerance(transducerInfo);
