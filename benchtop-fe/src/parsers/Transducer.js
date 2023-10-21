@@ -1,4 +1,5 @@
 import {ONE_NEW_LINE, TWO_NEW_LINES} from "./utils/constants.js";
+import {tr} from "date-fns/locale";
 
 const isInRange = (index, value, masterValues) => {
     return (masterValues[index]["Low Limit"] <= value && value <= masterValues[index]["High Limit"]);
@@ -55,6 +56,24 @@ function outOfTolerance(transducerInfo) {
     }
 }
 
+function doMerge(transducerInfo) {
+    let idx = 0;
+    while (transducerInfo["Master Value"].length > 0) {
+        const mv = transducerInfo["Master Value"].shift()
+        transducerInfo["Gauge Reading"][idx] = {...transducerInfo["Gauge Reading"][idx], ...mv}
+        idx++;
+    }
+    delete transducerInfo["Master Value"] // clean up
+}
+
+function refactorData(transducerInfo) {
+    const {['Gauge Reading']: gr, ...instrument} = transducerInfo
+    return {
+        "Instrument": instrument,
+        "Gauge Reading": gr
+    }
+}
+
 function parseSection(section, accuracy) {
     const lines = section.trim().split(ONE_NEW_LINE);
     const filteredLines = lines.filter((line) => !line.startsWith("==") && line !== "|| Transducer Verify Report ||");
@@ -77,6 +96,7 @@ function parseSection(section, accuracy) {
             [, value, unit] = match;
             value = parseInt(value);
         }
+        unit = unit.toUpperCase()
         if (unit === "SCCM" || unit === "LPM") {
             // SCCM and LPM are Flow
             transducerType = "Flow";
@@ -91,15 +111,15 @@ function parseSection(section, accuracy) {
 
     // Create an object to store the data for each transducer
     const transducerInfo = {
-        Accuracy: accuracy,
-        Value: value,
-        Unit: unit,
+        "Accuracy": accuracy,
+        "Value": value,
+        "Unit": unit,
         "Part Number": partNumber,
         "Limit ABS": value * accuracy * 1000,
         "Transducer Name": transducerName,
         "Transducer Type": transducerType,
-        "Gauge Reading": [],
         "Master Value": [],
+        "Gauge Reading": [],
         "Verify Date": "",
         "Verify Time": "",
     };
@@ -115,7 +135,8 @@ function parseSection(section, accuracy) {
     }));
 
     outOfTolerance(transducerInfo);
-    return transducerInfo;
+    doMerge(transducerInfo);
+    return refactorData(transducerInfo);
 }
 
 function parseTransducer(content, accuracy) {

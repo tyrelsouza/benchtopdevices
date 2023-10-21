@@ -9,13 +9,7 @@ describe("Test for all files", () => {
   for (const file of files) {
     test(`Can parse ${file.name}`, () => {
       const calibrations = ParseHardwareCalibration(file.content, 0.05);
-      console.log(calibrations.calibration)
+      console.log(calibrations)
     })
   }
 });
-
-/*
-
-  ? With hardware - is it still accuracy limits are 0.05% (or w.e specified) of `3LPM`
-
- */

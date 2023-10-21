@@ -3,16 +3,18 @@ import {ONE_NEW_LINE, TWO_NEW_LINES} from "./utils/constants.js";
 const isInRange = (value, masterValue) => {
     return (masterValue["Low Limit"] <= value && value <= masterValue["High Limit"]);
 }
-const calculateDelta = (value, masterValue) => {
-    return Math.abs(masterValue["Low Limit"] - value);
+const calculateDelta = (value, lowLimit) => {
+    return Math.abs(lowLimit - value);
 }
-function outOfTolerance(reading) {
+function outOfTolerance(readings) {
     // Calculate Out of Tolerances
-    for (const reading of reading) {
+    for (const reading of readings) {
         reading["Out Of Tolerance"] = 0;
-        if (!reading["In Range"]) {
-            reading["Out Of Tolerance"] = reading["Delta"];
+        if (reading["In Range"]) {
+            // We are good.
+            continue
         }
+        reading["Out Of Tolerance"] = reading["Delta"];
     }
 }
 
@@ -51,10 +53,11 @@ const KEEP = {
     "Pressure Transducer": ["Instrument Pressure", "Master Value"],
 };
 
-function deviceDataToObj(lines, keep, name) {
+function deviceDataToObj(lines, name, kind) {
+    const keep = KEEP[kind]
     const deviceData = {
         "Name":name,
-        "Master Values":[],
+        "Master Values":{},
         "Gauge Reading": []
     };
     for (const line of lines) {
@@ -65,28 +68,30 @@ function deviceDataToObj(lines, keep, name) {
                 deviceData[keyTrimmed] = value.trim();
             }
         }
-        // Master values occur twice, but due to the fact that this is
-        // editing KeyValues not Indexes, it will replace
-        // the masters with the second instance of these.
-        // No manual checks to skip the first.
+
         for (const start of keep) {
             if (keyTrimmed.startsWith(start)) {
                 if (keyTrimmed.includes("Master")) {
-                    deviceData["Master Values"].push(
-                        {
-                            "Value": value.trim()
-                        }
-                    )
+                       // Master values occur twice, but due to the fact that this is
+                      // editing KeyValues not Indexes, it will replace
+                     // the masters with the second instance of these.
+                    // No manual checks to skip the first.
+                    deviceData["Master Values"][keyTrimmed] = {"v": value.trim()}
                 } else {
-                    deviceData["Gauge Reading"].push(
-                        {
-                            "Value": value.trim()
-                        }
-                    )
+                    deviceData["Gauge Reading"].push({"Value": value.trim()})
                 }
             }
         }
     }
+    // Because of the annoyances of two entries,
+    // Loop through, merging the objects and deleting the old
+    for (let i in deviceData["Gauge Reading"]) {
+        i = parseInt(i)
+
+        const key = (kind === "Mass Flow Trans") ? `Master Reading ${i+1}` : `Master Value ${i+1}`
+        deviceData["Gauge Reading"][i]["Master Value"] = deviceData["Master Values"][key]["v"]
+    }
+    delete deviceData["Master Values"]
     return deviceData;
 }
 
@@ -100,23 +105,21 @@ function calculateLimitsAndTolerances(calibrationDatum, accuracy) {
     }
 
     let limit = accuracy * value * 1000
-    for (const mv of calibrationDatum["Master Values"]) {
-        const reading = parseInt(mv["Value"].split(" ")[0]) * 1000;
-        mv["Low Limit"] = reading - limit
-        mv["High Limit"] = reading + limit
-        mv["Value"] = reading
+    for (const gr of calibrationDatum["Gauge Reading"]) {
+        const master_value = parseInt(gr["Master Value"].split(" ")[0]) * 1000;
+        gr["Low Limit"] = master_value - limit
+        gr["Master Value"] = master_value
+        gr["High Limit"] = master_value + limit
     }
-    for (const i in calibrationDatum["Gauge Reading"]) {
-        let gr = calibrationDatum["Gauge Reading"][i];
-        const mv = calibrationDatum["Master Values"][i];
+    for (const gr of calibrationDatum["Gauge Reading"]) {
         const [val, unit] = gr["Value"].split(" ")
         const reading = parseInt(val) * 1000;
 
         gr["Value"] = reading; // Update the original, ignoring the units
         gr["Unit"] = unit;
-        gr["In Range"] = isInRange(reading, mv)
-        gr["Delta"] = calculateDelta(reading, mv)
-
+        gr["In Range"] = isInRange(reading, gr["Master Value"])
+        gr["Delta"] = calculateDelta(reading, gr["Low Limit"])
+        console.log(0)
     }
     outOfTolerance(calibrationDatum["Gauge Reading"])
 }
@@ -135,7 +138,7 @@ const parseCalibrationData = (text, accuracy) => {
         lines.shift(); // Remove "=======" line
         const deviceName = lines.shift().trim().split(/\s+/).slice(-1)[0].trim();
 
-        calibrationData[blockTitle] = deviceDataToObj(lines, KEEP[blockTitle], deviceName);
+        calibrationData[blockTitle] = deviceDataToObj(lines, deviceName, blockTitle);
     }
 
     for (const bt of blockTitles) {
@@ -151,7 +154,7 @@ function parseHardwareCalibration(content, accuracy) {
     const instrumentInfo = parseInstrumentInfo(instrument);
     const portData = parsePorts(ports, accuracy);
 
-    return {instrument: instrumentInfo, calibration: portData};
+    return {"Instrument": instrumentInfo, "Calibration": portData};
 }
 
 export default function ParseHardwareCalibration(content, accuracy) {

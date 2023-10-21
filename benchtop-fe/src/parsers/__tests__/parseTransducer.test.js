@@ -8,16 +8,14 @@ describe("Test for all files", () => {
     for (const file of files) {
         test(`Can parse ${file.name}`, () => {
             const transducers = ParseTransducer(file.content, 0.05)
-            console.log(transducers[0]["Master Value"])
             expect(transducers.length).toBeGreaterThan(0)
             for (const transducer of transducers) {
-                expect(transducer).toHaveProperty("Part Number")
-                expect(transducer).toHaveProperty("Transducer Name")
+                expect(transducer["Instrument"]).toHaveProperty("Part Number")
+                expect(transducer["Instrument"]).toHaveProperty("Transducer Name")
                 expect(transducer).toHaveProperty("Gauge Reading")
-                expect(transducer).toHaveProperty("Master Value")
+                expect(transducer).not.toHaveProperty("Master Value")
 
                 expect(transducer["Gauge Reading"].length).toBeGreaterThan(1);
-                expect(transducer["Master Value"].length).toBe(transducer["Gauge Reading"].length);
             }
         });
     }
@@ -28,14 +26,14 @@ describe("Testing actual calculations", () => {
         const content = fs.readFileSync("src/parsers/__tests__/transducer_verify/Blackbelt with flow 220601_143736 Transducer Verify.txt", 'utf8');
         const transducers = ParseTransducer(content, 0.05);
         for (const transducer of transducers) {
-            let anyOOT = false;
+            let atLeastOneOOT = false;
             for (const gauge of transducer["Gauge Reading"]) {
                 if (!gauge["In Range"]) {
-                    anyOOT = true;
+                    atLeastOneOOT = true;
                     expect(gauge["Out Of Tolerance"]).toBeGreaterThan(0)
                 }
             }
-            expect(anyOOT).toBeTruthy();
+            expect(atLeastOneOOT).toBeTruthy();
         }
     })
 });
