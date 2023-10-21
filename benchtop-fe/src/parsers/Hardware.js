@@ -119,7 +119,6 @@ function calculateLimitsAndTolerances(calibrationDatum, accuracy) {
         gr["Unit"] = unit;
         gr["In Range"] = isInRange(reading, gr["Master Value"])
         gr["Delta"] = calculateDelta(reading, gr["Low Limit"])
-        console.log(0)
     }
     outOfTolerance(calibrationDatum["Gauge Reading"])
 }

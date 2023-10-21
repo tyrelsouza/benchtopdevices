@@ -46,10 +46,10 @@ describe("Testing Errors", () => {
         expect(e).toThrowError(Error("Not a Transducer Verify Report"))
     })
     test("Unknown Unit", () => {
-         const e = () => {
-             ParseTransducer(`|| Transducer Verify Report ||\nTRANSDUCER1\n===============================================================\nTransducer 1               CTS D34-442 115FigNewtons`, 0);
-         }
-        expect(e).toThrowError(Error("Unknown Type of Test, do not know unit: FigNewtons"))
+        const e = () => {
+            ParseTransducer(`|| Transducer Verify Report ||\nTRANSDUCER1\n===============================================================\nTransducer 1               CTS D34-442 115FigNewtons`, 0);
+        }
+        expect(e).toThrowError(Error("Unknown Type of Test, do not know unit: FIGNEWTONS"))
 
     })
 })
