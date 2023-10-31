@@ -126,6 +126,6 @@ const emits = defineEmits([
 <style scoped>
 body {
   margin: 1rem;
-  background: url("/public/funky-lines.webp");
+  background: url("/funky-lines.webp");
 }
 </style>

@@ -96,10 +96,13 @@
     </table>
   </div>
 </template>
-<script>
-export default {
-  name: 'ReadingTable'
-}
+<script setup>
+import {defineProps, ref} from "vue";
+
+const props = defineProps({
+  as_found: Object,
+  as_left: Object,
+});
 </script>
 <style scoped>
 @media print {

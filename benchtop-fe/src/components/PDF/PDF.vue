@@ -6,7 +6,7 @@
     </button>
     <br>
     <br>
-    <div :class="{ hide: hide }" class="px666">
+    <div :class="{ hide: hide }" class="px666 scroll-pdf">
       <div v-for="table of tables">
         <div id="pdf" ref="document">
           <div class="header">
@@ -95,10 +95,10 @@
           <br/>
           <!-- End InstrumentInfo -->
           <!-- As Found -->
-          <ReadingTable />
+          <ReadingTable :as_found="table.as_found" />
           <br/>
           <!-- As Left -->
-          <ReadingTable />
+          <ReadingTable :as_left="table.as_left" />
           <!-- End Instruments-->
           <div class="box">
             <p>
@@ -223,7 +223,7 @@ const output = () => {
     }
   }
 
-  return tables
+  // return tables
 }
 
 

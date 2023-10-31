@@ -1,6 +1,6 @@
 body {
   margin: 1rem;
-  background: url("/public/funky-lines.webp");
+  background: url("/funky-lines.webp");
 }
 
 .card {
@@ -93,4 +93,9 @@ h3 {
 
 .px666 {
   width: 666px;
+}
+
+.scroll-pdf {
+  height: 90vh;
+  overflow: scroll;
 }
