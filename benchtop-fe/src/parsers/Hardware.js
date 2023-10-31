@@ -1,11 +1,10 @@
-import {ONE_NEW_LINE, TWO_NEW_LINES} from "./utils/constants.js";
-
 const isInRange = (value, masterValue) => {
     return (masterValue["Low Limit"] <= value && value <= masterValue["High Limit"]);
 }
 const calculateDelta = (value, lowLimit) => {
     return Math.abs(lowLimit - value);
 }
+
 function outOfTolerance(readings) {
     // Calculate Out of Tolerances
     for (const reading of readings) {
@@ -56,8 +55,8 @@ const KEEP = {
 function deviceDataToObj(lines, name, kind) {
     const keep = KEEP[kind]
     const deviceData = {
-        "Name":name,
-        "Master Values":{},
+        "Name": name,
+        "Master Values": {},
         "Gauge Reading": []
     };
     for (const line of lines) {
@@ -72,9 +71,9 @@ function deviceDataToObj(lines, name, kind) {
         for (const start of keep) {
             if (keyTrimmed.startsWith(start)) {
                 if (keyTrimmed.includes("Master")) {
-                       // Master values occur twice, but due to the fact that this is
-                      // editing KeyValues not Indexes, it will replace
-                     // the masters with the second instance of these.
+                    // Master values occur twice, but due to the fact that this is
+                    // editing KeyValues not Indexes, it will replace
+                    // the masters with the second instance of these.
                     // No manual checks to skip the first.
                     deviceData["Master Values"][keyTrimmed] = {"v": value.trim()}
                 } else {
@@ -88,7 +87,7 @@ function deviceDataToObj(lines, name, kind) {
     for (let i in deviceData["Gauge Reading"]) {
         i = parseInt(i)
 
-        const key = (kind === "Mass Flow Trans") ? `Master Reading ${i+1}` : `Master Value ${i+1}`
+        const key = (kind === "Mass Flow Trans") ? `Master Reading ${i + 1}` : `Master Value ${i + 1}`
         deviceData["Gauge Reading"][i]["Master Value"] = deviceData["Master Values"][key]["v"]
     }
     delete deviceData["Master Values"]
@@ -148,6 +147,11 @@ const parseCalibrationData = (text, accuracy) => {
 }
 
 function parseHardwareCalibration(content, accuracy) {
+    // hack because we can't be sure that the file will end in two newlines, so might as well force it to add two
+    // this way if there's only zero or one, we can still regex match on that
+    content += "\r\n\r\n"
+
+    // Replace the newlines consistently on windows/linux
     content = content.replace(/\r\n/g, "\r").replace(/\n/g, "\r")
     const [instrument, ports] = content.split("|| Hardware Calibration Report ||");
     const instrumentInfo = parseInstrumentInfo(instrument);
@@ -157,5 +161,6 @@ function parseHardwareCalibration(content, accuracy) {
 }
 
 export default function ParseHardwareCalibration(content, accuracy) {
+
     return parseHardwareCalibration(content, accuracy);
 }

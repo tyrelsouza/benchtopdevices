@@ -15,7 +15,7 @@ describe("Test for all files", () => {
                 expect(transducer).toHaveProperty("Gauge Reading")
                 expect(transducer).not.toHaveProperty("Master Value")
 
-                expect(transducer["Gauge Reading"].length).toBeGreaterThan(1);
+                expect(transducer["Gauge Reading"].length).toBeGreaterThan(0);
             }
         });
     }
@@ -50,6 +50,64 @@ describe("Testing Errors", () => {
             ParseTransducer(`|| Transducer Verify Report ||\nTRANSDUCER1\n===============================================================\nTransducer 1               CTS D34-442 115FigNewtons`, 0);
         }
         expect(e).toThrowError(Error("Unknown Type of Test, do not know unit: FIGNEWTONS"))
-
     })
 })
+
+describe("Testing proper shape", () => {
+    test("It outputs an array of arrays", () => {
+        const content = fs.readFileSync("src/parsers/__tests__/transducer_verify/smallest.txt.txt", 'utf8');
+        const transducers = ParseTransducer(content, 0.05);
+        expect(transducers).toEqual(
+            [
+                {
+                    Instrument: {
+                        Accuracy: 0.0005,
+                        Value: 115,
+                        Unit: 'PSIA',
+                        'Part Number': 'CTS D34-442',
+                        'Limit ABS': 57.5,
+                        'Transducer Name': 'Transducer 1',
+                        'Transducer Type': 'Pressure',
+                        'Verify Date': '07/20/22',
+                        'Verify Time': '11:20:26'
+                    },
+                    'Gauge Reading': [
+                        {
+                            "Delta": 57.5,
+                            "High Limit": 57.5,
+                            "In Range": true,
+                            "Low Limit": -57.5,
+                            "Master Value": 0,
+                            "Out Of Tolerance": 0,
+                            "Value": 0,
+                        },
+                    ]
+                },
+                {
+                    Instrument: {
+                        Accuracy: 0.0005,
+                        Value: 250,
+                        Unit: 'SCCM',
+                        'Part Number': 'CTS A12-221',
+                        'Limit ABS': 125,
+                        'Transducer Name': 'Transducer 2',
+                        'Transducer Type': 'Flow',
+                        'Verify Date': '07/15/21',
+                        'Verify Time': '14:55:10'
+                    },
+                    'Gauge Reading': [
+                        {
+                            "Delta": 125,
+                            "High Limit": 125,
+                            "In Range": true,
+                            "Low Limit": -125,
+                            "Master Value": 0,
+                            "Out Of Tolerance": 0,
+                            "Value": -0,
+                        },
+                    ]
+                }
+            ]
+        )
+    })
+});

@@ -1,0 +1,21 @@
+|| Transducer Verify Report ||
+TRANSDUCER1       
+===============================================================
+Transducer 1               CTS D34-442 115PSIA                        
+Setpoint Pressure 1        0.000 psig                                 
+Instrument Pressure 1      0.000 psig
+Master Value 1             0.000 psig
+Verify Date                07/20/22
+Verify Time                11:20:26                                   
+
+TRANSDUCER2       
+===============================================================
+Transducer 2               CTS A12-221 250SCCM                        
+Setpoint Pressure 1        20.000 psig                                
+Instrument Pressure 1      20.154 psig
+Instrument Flow 1          -0.082 sccm
+Master Reading 1           0.000 sccm
+Master Value 1             0.000 sccm
+Verify Date                07/15/21
+Verify Time                14:55:10     
+
