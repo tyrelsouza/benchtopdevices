@@ -110,7 +110,7 @@ const showNewCalibration = (val) => {
   show_new_calibration.value = val;
 };
 
-const emit = defineEmits([
+const emits = defineEmits([
   "uploadForm",
   "customerForm",
   "environmentForm",

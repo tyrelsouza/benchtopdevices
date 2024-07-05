@@ -1,122 +1,124 @@
 <template>
-  <div class="card-header">Finished?</div>
-  <div class="card-body">
-    <button class="custom-button" @click="exportToPDF">
-      Generate PDF and Label
-    </button>
-    <br>
-    <br>
-    <div :class="{ hide: hide }" class="px666 scroll-pdf">
-      <div id="pdf" ref="document">
-        <div v-for="table of tables">
-          <div class="header">
-            <div class="flex-container">
-              <div class="column pct-25">
-                <img :src="BenchTopLogoUrl" alt="benchtop devices logo" />
-              </div>
-              <div class="column pct-50">
-                <div>Customer: {{ props.customer?.customer_name }}</div>
-                <div>Onsite cal (yes/no): {{ onsite() }}</div>
-                <div>Control Doc#: {{ props.customer?.control_doc }}</div>
-                <div>Technician: {{ props.customer?.technician }}</div>
-              </div>
-              <div class="column pct-25">
-                <img :src="Al2pCertUrl"/>
+  <div>
+    <div class="card-header">Finished?</div>
+    <div class="card-body">
+      <button class="custom-button" @click="exportToPDF">
+        Generate PDF and Label
+      </button>
+      <br>
+      <br>
+      <div :class="{ hide: hide }" class="px666 scroll-pdf">
+        <div id="pdf" ref="document">
+          <div v-for="table of tables">
+            <div class="header">
+              <div class="flex-container">
+                <div class="column pct-25">
+                  <img :src="BenchTopLogoUrl" alt="benchtop devices logo" />
+                </div>
+                <div class="column pct-50">
+                  <div>Customer: {{ props.customer?.customer_name }}</div>
+                  <div>Onsite cal (yes/no): {{ onsite() }}</div>
+                  <div>Control Doc#: {{ props.customer?.control_doc }}</div>
+                  <div>Technician: {{ props.customer?.technician }}</div>
+                </div>
+                <div class="column pct-25">
+                  <img :src="Al2pCertUrl"/>
+                </div>
               </div>
             </div>
-          </div>
-          <!-- EndHeader -->
-          <h1>Calibration Certificate</h1>
+            <!-- EndHeader -->
+            <h1>Calibration Certificate</h1>
 
-          <!-- Instrument Info -->
-          <div class="instrument-information">
-            <div class="flex-container">
-              <div class="column pct-33">
-                <div><span class="ul">Instrument</span></div>
-                <div>
-                  <span class="label">Model :</span>{{ props.instrument?.model }}
+            <!-- Instrument Info -->
+            <div class="instrument-information">
+              <div class="flex-container">
+                <div class="column pct-33">
+                  <div><span class="ul">Instrument</span></div>
+                  <div>
+                    <span class="label">Model :</span>{{ props.instrument?.model }}
+                  </div>
+                  <div>
+                  <span class="label">Serial# :</span
+                  >{{ props.instrument?.serial_number }}
+                  </div>
+                  <div>
+                  <span class="label">Channel :</span
+                  >{{ props.instrument?.channel }}
+                  </div>
+                  <div>
+                  <span class="label">Transducer Model :</span
+                  >{{ props.instrument?.transducer_model }}
+                  </div>
+                  <div>
+                  <span class="label">Transducer Span :</span
+                  >{{ props.instrument?.transducer_span }}
+                  </div>
                 </div>
-                <div>
-                <span class="label">Serial# :</span
-                >{{ props.instrument?.serial_number }}
+                <div class="column pct-33">
+                  <div><span class="ul">Primary Cal Device</span></div>
+                  <div>
+                    <span class="label">Model :</span>{{ props.calibration?.model }}
+                  </div>
+                  <div>
+                  <span class="label">Serial# :</span
+                  >{{ props.calibration?.serial }}
+                  </div>
+                  <div><span class="label">Cal Date :</span>{{ c_date() }}</div>
+                  <div>
+                    <span class="label">Cal Due Date :</span>{{ c_due_date() }}
+                  </div>
+                  <div>
+                  <span class="label">Cert ID :</span
+                  >{{ props.calibration?.cert_id }}
+                  </div>
                 </div>
-                <div>
-                <span class="label">Channel :</span
-                >{{ props.instrument?.channel }}
-                </div>
-                <div>
-                <span class="label">Transducer Model :</span
-                >{{ props.instrument?.transducer_model }}
-                </div>
-                <div>
-                <span class="label">Transducer Span :</span
-                >{{ props.instrument?.transducer_span }}
-                </div>
-              </div>
-              <div class="column pct-33">
-                <div><span class="ul">Primary Cal Device</span></div>
-                <div>
-                  <span class="label">Model :</span>{{ props.calibration?.model }}
-                </div>
-                <div>
-                <span class="label">Serial# :</span
-                >{{ props.calibration?.serial }}
-                </div>
-                <div><span class="label">Cal Date :</span>{{ c_date() }}</div>
-                <div>
-                  <span class="label">Cal Due Date :</span>{{ c_due_date() }}
-                </div>
-                <div>
-                <span class="label">Cert ID :</span
-                >{{ props.calibration?.cert_id }}
-                </div>
-              </div>
-              <div class="column pct-33">
-                <div><span class="label">Cal Date :</span>{{ i_date() }}</div>
-                <div>
-                  <span class="label">Cal Due Date :</span>{{ i_due_date() }}
-                </div>
-                <div><span class="ul">Environmental Data</span></div>
-                <div>
-                <span class="label">Baro (Psi) :</span
-                >{{ props.environment?.pressure }}
-                </div>
-                <div>
-                <span class="label">Temp (&deg;F):</span
-                >{{ props.environment?.temperature }}
-                </div>
-                <div>
-                <span class="label">Humidity (%RH):</span
-                >{{ props.environment?.humidity }}
+                <div class="column pct-33">
+                  <div><span class="label">Cal Date :</span>{{ i_date() }}</div>
+                  <div>
+                    <span class="label">Cal Due Date :</span>{{ i_due_date() }}
+                  </div>
+                  <div><span class="ul">Environmental Data</span></div>
+                  <div>
+                  <span class="label">Baro (Psi) :</span
+                  >{{ props.environment?.pressure }}
+                  </div>
+                  <div>
+                  <span class="label">Temp (&deg;F):</span
+                  >{{ props.environment?.temperature }}
+                  </div>
+                  <div>
+                  <span class="label">Humidity (%RH):</span
+                  >{{ props.environment?.humidity }}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <br/>
-          <!-- End InstrumentInfo -->
-          <!-- As Found -->
-          <ReadingTable :as_found="table.as_found" />
-          <br/>
-          <!-- As Left -->
-          <ReadingTable :as_left="table.as_left" />
-          <!-- End Instruments-->
-          <div class="box">
-            <p>
-              Secondary Cal Device (For Environmental Data): EXTECH S/N A23050006
-              Cert # 1535483 07/24/23 (Cal Date) (Precision Psychrometer)
-            </p>
-            <p>
-              Uncertainty Statement: The accuracy of measurement is determined by
-              the standards uncertainty, with a coverage factor of k=2 (confidence
-              of roughly 95%).
-            </p>
+            <br/>
+            <!-- End InstrumentInfo -->
+            <!-- As Found -->
+            <ReadingTable :as_found="table.as_found" />
+            <br/>
+            <!-- As Left -->
+            <ReadingTable :as_left="table.as_left" />
+            <!-- End Instruments-->
+            <div class="box">
+              <p>
+                Secondary Cal Device (For Environmental Data): EXTECH S/N A23050006
+                Cert # 1535483 07/24/23 (Cal Date) (Precision Psychrometer)
+              </p>
+              <p>
+                Uncertainty Statement: The accuracy of measurement is determined by
+                the standards uncertainty, with a coverage factor of k=2 (confidence
+                of roughly 95%).
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div>
-    {{ output() }}
+    <div>
+      {{ output() }}
+    </div>
   </div>
 </template>
 

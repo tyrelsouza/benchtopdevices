@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="card-header">
     Primary Cal Device
     <button class="custom-button" role="button" @click="showNewCalibrationClick">+ New</button>
@@ -26,6 +27,7 @@
       Primary Calibration Device, or press New to log a new device.
       </p>
     </div>
+  </div>
   </div>
 </template>
 <script setup>

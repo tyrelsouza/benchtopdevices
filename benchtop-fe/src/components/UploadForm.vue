@@ -1,86 +1,88 @@
 <template>
-  <div class="card-header">Report Uploads</div>
-  <div class="card-body">
-    <table class="table">
-      <tbody>
-        <tr>
-          <td>
-            Report Type
-            <select
-              name="report_type"
-              v-model="report_type"
-              required
-              id="id_report_type"
-            >
-              <option value="-" selected>----Select-----</option>
-              <option value="Transducer Verify">Transducer Verify</option>
-              <option value="Hardware Calibration">Hardware Calibration</option>
-            </select>
-          </td>
-        </tr>
-        <tr v-if="report_type != '-' || showUpload">
-          <td>
-            <button
-              class="custom-button"
-              @click="openFileInput"
-              v-if="showUpload"
-            >
-              Select {{ report_type }} File
-            </button>
-          </td>
-        </tr>
-        <tr v-if="files.length > 0">
-          <td>
-            <ul>
-              <li v-for="(file, index) in files" :key="index" class="file-list">
-                <button class="custom-button red" @click="removeUpload(index)">
-                  X
-                </button>
-                <span>{{ file.name }}</span>
-                <div class="kind btn-group">
-                  <input
-                    type="radio"
-                    class="btn-check"
-                    :id="'both_kind_' + index"
-                    :name="'kind_' + index"
-                    value="both"
-                    @change="kindChange('both', file)"
-                  />
-                  <label class="btn btn-primary" :for="'both_kind_' + index"> Both </label>
+  <div>
+    <div class="card-header">Report Uploads</div>
+    <div class="card-body">
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>
+              Report Type
+              <select
+                name="report_type"
+                v-model="report_type"
+                required
+                id="id_report_type"
+              >
+                <option value="-" selected>----Select-----</option>
+                <option value="Transducer Verify">Transducer Verify</option>
+                <option value="Hardware Calibration">Hardware Calibration</option>
+              </select>
+            </td>
+          </tr>
+          <tr v-if="report_type != '-' || showUpload">
+            <td>
+              <button
+                class="custom-button"
+                @click="openFileInput"
+                v-if="showUpload"
+              >
+                Select {{ report_type }} File
+              </button>
+            </td>
+          </tr>
+          <tr v-if="files.length > 0">
+            <td>
+              <ul>
+                <li v-for="(file, index) in files" :key="index" class="file-list">
+                  <button class="custom-button red" @click="removeUpload(index)">
+                    X
+                  </button>
+                  <span>{{ file.name }}</span>
+                  <div class="kind btn-group">
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      :id="'both_kind_' + index"
+                      :name="'kind_' + index"
+                      value="both"
+                      @change="kindChange('both', file)"
+                    />
+                    <label class="btn btn-primary" :for="'both_kind_' + index"> Both </label>
 
-                  <input
-                    type="radio"
-                    class="btn-check"
-                    :id="'af_kind_' + index"
-                    :name="'kind_' + index"
-                    value="found"
-                    @change="kindChange('found', file)"
-                  />
-                  <label class="btn btn-primary" :for="'af_kind_' + index">
-                    As Found
-                  </label>
-                  <input
-                    type="radio"
-                    class="btn-check"
-                    :id="'al_kind_' + index"
-                    :name="'kind_' + index"
-                    value="left"
-                    @change="kindChange('left', file)"
-                  />
-                  <label class="btn btn-primary" :for="'al_kind_' + index"> As Left </label>
-                </div>
-              </li>
-            </ul>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <input
-      ref="doc"
-      type="file"
-      style="display: none"
-      @change="readFile($event)"
-    />
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      :id="'af_kind_' + index"
+                      :name="'kind_' + index"
+                      value="found"
+                      @change="kindChange('found', file)"
+                    />
+                    <label class="btn btn-primary" :for="'af_kind_' + index">
+                      As Found
+                    </label>
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      :id="'al_kind_' + index"
+                      :name="'kind_' + index"
+                      value="left"
+                      @change="kindChange('left', file)"
+                    />
+                    <label class="btn btn-primary" :for="'al_kind_' + index"> As Left </label>
+                  </div>
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <input
+        ref="doc"
+        type="file"
+        style="display: none"
+        @change="readFile($event)"
+      />
+    </div>
   </div>
 </template>
 
@@ -152,7 +154,7 @@ const readFile = ($event) => {
 
 const emit = defineEmits();
 watchEffect(() => {
-  emit("upload-form", {
+  emit("uploadForm", {
     report_type,
     files,
   });
