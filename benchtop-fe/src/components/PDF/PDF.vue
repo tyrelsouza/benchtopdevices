@@ -198,7 +198,6 @@ const exportToPDF = () => {
   if (props.upload !== undefined && props.upload.files.length > 0) {
     const element = document.getElementById("pdf");
 
-
     var opt = {
       margin: 0.4,
       filename: `${props.instrument.model}_${i_date()}.pdf`,

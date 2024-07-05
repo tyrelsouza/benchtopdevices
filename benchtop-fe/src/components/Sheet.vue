@@ -37,6 +37,7 @@
     </div>
 
     <div class="right">
+      <!-- these props don't recalculate -->
       <PDF
         :upload="upload_form_data"
         :customer="customer_form_data"
@@ -121,6 +122,8 @@ const emits = defineEmits([
   "showNewInstrument",
   "showNewCalibration",
 ]);
+
+
 </script>
 
 <style scoped>

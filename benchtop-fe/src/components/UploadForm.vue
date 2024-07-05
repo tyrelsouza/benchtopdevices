@@ -152,11 +152,13 @@ const readFile = ($event) => {
   doc.value.value = null;
 };
 
-const emit = defineEmits();
+const emit = defineEmits([
+    "upload-form",
+]);
 watchEffect(() => {
-  emit("uploadForm", {
-    report_type,
-    files,
+  emit("upload-form", {
+    report_type: report_type,
+    files: files,
   });
 });
 </script>
