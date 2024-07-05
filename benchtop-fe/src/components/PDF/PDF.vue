@@ -7,12 +7,12 @@
     <br>
     <br>
     <div :class="{ hide: hide }" class="px666 scroll-pdf">
-      <div v-for="table of tables">
-        <div id="pdf" ref="document">
+      <div id="pdf" ref="document">
+        <div v-for="table of tables">
           <div class="header">
             <div class="flex-container">
               <div class="column pct-25">
-                <img :src="BenchTopLogoUrl"/>
+                <img :src="BenchTopLogoUrl" alt="benchtop devices logo" />
               </div>
               <div class="column pct-50">
                 <div>Customer: {{ props.customer?.customer_name }}</div>
@@ -193,15 +193,19 @@ const c_due_date = () => {
 };
 
 const exportToPDF = () => {
-  const element = document.getElementById("pdf");
-  var opt = {
-    margin: 0.4,
-    filename: `${props.instrument.model}_${i_date()}.pdf`,
-    image: {type: "jpeg", quality: 0.98},
-    html2canvas: {scale: 2},
-    jsPDF: {unit: "in", format: "letter", orientation: "portrait"},
-  };
-  html2pdf().from(element).set(opt).save();
+  if (props.upload !== undefined && props.upload.files.length > 0) {
+    const element = document.getElementById("pdf");
+
+
+    var opt = {
+      margin: 0.4,
+      filename: `${props.instrument.model}_${i_date()}.pdf`,
+      image: {type: "jpeg", quality: 0.98},
+      html2canvas: {scale: 2},
+      jsPDF: {unit: "in", format: "letter", orientation: "portrait"},
+    };
+    html2pdf().from(element).set(opt).save();
+  }
 };
 
 const output = () => {
