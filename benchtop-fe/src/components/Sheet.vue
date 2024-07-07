@@ -62,19 +62,19 @@ import UploadForm from "./Upload/UploadForm.vue";
 import PDF from "./PDF/PDF.vue";
 
 // Not needed yet
-const instrument_form_data = ref(),
-  calibration_form_data = ref();
+const instrument_form_data = ref(null),
+  calibration_form_data = ref(null);
 
 // Booleans
 const show_new_instrument = ref(true),
   show_new_calibration = ref(true);
 
 // form Data
-const upload_form_data = ref(),
-  customer_form_data = ref(),
-  environment_form_data = ref(),
-  new_instrument_form_data = ref(),
-  new_calibration_form_data = ref();
+const upload_form_data = ref(null),
+  customer_form_data = ref(null),
+  environment_form_data = ref(null),
+  new_instrument_form_data = ref(null),
+  new_calibration_form_data = ref(null);
 
 const uploadForm = (form) => {
   upload_form_data.value = form;
@@ -122,8 +122,6 @@ const emits = defineEmits([
   "showNewInstrument",
   "showNewCalibration",
 ]);
-
-
 </script>
 
 <style scoped>

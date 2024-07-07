@@ -6,10 +6,9 @@
         Generate PDF and Label
       </button>
       <br>
-      <br>
       <div :class="{ hide: hide }" class="px666 scroll-pdf">
         <div id="pdf" ref="document">
-          <div v-for="table of tables">
+          <div v-for="(table, index) in tables" :key="index">
             <div class="header">
               <div class="flex-container">
                 <div class="column pct-25">
@@ -22,7 +21,7 @@
                   <div>Technician: {{ props.customer?.technician }}</div>
                 </div>
                 <div class="column pct-25">
-                  <img :src="Al2pCertUrl"/>
+                  <img :src="Al2pCertUrl" alt="AL2P Cert"/>
                 </div>
               </div>
             </div>
@@ -116,13 +115,11 @@
         </div>
       </div>
     </div>
-    <div>
-    </div>
   </div>
 </template>
 
 <script setup>
-import {defineProps, ref} from "vue";
+import {computed, defineProps, onMounted, ref} from "vue";
 import html2pdf from "html2pdf.js";
 import BenchTopLogoUrl from "../../assets/BenchTopLogo.png";
 import Al2pCertUrl from "../../assets/al2pCert.png";
@@ -132,7 +129,6 @@ import ParseHardwareCalibration from "../../parsers/Hardware.js"
 import ReadingTable from "./ReadingTable.vue";
 
 const hide = ref(false);
-const tables = ref([])
 
 const props = defineProps({
   upload: Object,
@@ -147,10 +143,7 @@ const onsite = () => {
 };
 
 const i_date = () => {
-  if (props.instrument === undefined) {
-    return
-  }
-  if (props.instrument.date === undefined) {
+  if (!props.instrument?.date) {
     return
   }
   const d = props.instrument.date
@@ -162,7 +155,7 @@ const i_date = () => {
 
 
 const i_due_date = () => {
-  if (props.instrument?.due_date === undefined) {
+  if (!props.instrument?.due_date) {
     return;
   }
   const d = props.instrument.due_date
@@ -173,7 +166,7 @@ const i_due_date = () => {
 };
 
 const c_date = () => {
-  if (props.calibration?.date === undefined) {
+  if (!props.calibration?.date) {
     return;
   }
   const d = props.calibration.date
@@ -183,7 +176,7 @@ const c_date = () => {
   return `${year}-${month}-${day}`;
 };
 const c_due_date = () => {
-  if (props.calibration?.due_date === undefined) {
+  if (!props.calibration?.due_date) {
     return;
   }
   const d = props.calibration.due_date
@@ -194,7 +187,7 @@ const c_due_date = () => {
 };
 
 const exportToPDF = () => {
-  if (props.upload !== undefined && props.upload.files.length > 0) {
+  if (props.upload.files.length > 0) {
     const element = document.getElementById("pdf");
 
     var opt = {
@@ -208,28 +201,27 @@ const exportToPDF = () => {
   }
 };
 
-const output = () => {
+const tables = computed(() => {
   let content = ""
-  tables.value = []
+  let tables = []
 
-  if (props.upload !== undefined && props.upload.files.length > 0) {
+  if (props.upload?.files?.length > 0) {
     const acc = props.environment.accuracy
     if (props.upload.report_type === "Transducer Verify") {
       for (const idx in props.upload.files) {
         content = ParseTransducer(props.upload.files[idx]["value"], acc)
-        tables.value = [...tables.value, ...content]
+        tables = [...tables, ...content]
       }
     } else if (props.upload.report_type === "Hardware Calibration") {
       for (const idx in props.upload.files) {
         content = ParseHardwareCalibration(props.upload.files[idx]["value"], acc)
-        tables.value = [...tables.value, ...[content]]
+        tables = [...tables, ...[content]]
       }
     }
   }
 
-  // return tables
-}
-
+  return tables;
+})
 
 </script>
 
