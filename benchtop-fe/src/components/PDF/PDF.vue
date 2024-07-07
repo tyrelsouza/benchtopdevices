@@ -117,7 +117,6 @@
       </div>
     </div>
     <div>
-      {{ output() }}
     </div>
   </div>
 </template>

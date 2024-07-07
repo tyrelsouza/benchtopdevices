@@ -52,13 +52,13 @@
 <script setup>
 import { ref, defineEmits } from "vue";
 
-import CustomerForm from "./CustomerForm.vue";
+import CustomerForm from "./Customer/CustomerForm.vue";
 import NewInstrumentForm from "./Instrument/NewInstrumentForm.vue";
 import InstrumentForm from "./Instrument/InstrumentForm.vue";
 import NewCalibrationDeviceForm from "./CalibrationDevice/NewCalibrationDeviceForm.vue";
 import CalibrationDeviceForm from "./CalibrationDevice/CalibrationDeviceForm.vue";
-import EnvironmentForm from "./EnvironmentForm.vue";
-import UploadForm from "./UploadForm.vue";
+import EnvironmentForm from "./Environment/EnvironmentForm.vue";
+import UploadForm from "./Upload/UploadForm.vue";
 import PDF from "./PDF/PDF.vue";
 
 // Not needed yet
